@@ -507,80 +507,7 @@ __declspec(dllexport) HRESULT PresentHook(IDXGISwapChain* swapChain, UINT syncIn
 			Info
 		};
 		static int tab_index = 3;
-		static int tab_index = 3;
-		void draw_visuals_tab()
-		{
-			//ImGui::Columns(1, NULL, false);
-			//ImGui::BeginChild(xorstr("player_esp_child"), ImVec2(450, 350), true);
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("player visuals"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
-			ImGui::Text(xorstr("player visuals"));
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::Checkbox(xorstr("Covid ESP"), &Settings.ESP.PlayerAmmo);
-			ImGui::Checkbox(xorstr("Covid Crosshair"), &Settings.Crosshair);
-			ImGui::Checkbox(xorstr("Covid Boat ESP"), &Settings.ESP.Boxes);
-			ImGui::Checkbox(xorstr("Covid Ammo ESP"), &Settings.ESP.debug);
-			ImGui::Checkbox(xorstr("Covid Helicopter ESP"), &Settings.ESP.PlayerNames);
-			ImGui::Checkbox(xorstr("Covid Car ESP"), &Settings.ESP.Radar);
-			ImGui::Spacing();
-			//ImGui::EndChild();
-		}
-		void draw_aimbot_tab()
-		{
-			//ImGui::Columns(1, NULL, false);
-			//ImGui::BeginChild(xorstr("##aimbot_main_child"), ImVec2(450, 350), true);
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("aimbot settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
-			ImGui::Text(xorstr("Aimbot"));
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::Checkbox(xorstr("Aimbot"), &Settings.Aimbot);
-			ImGui::Checkbox(xorstr("Silent Aimbot"), &Settings.SilentAimbot);
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("aimbot adjust"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
-			ImGui::Text(xorstr("Aimbot Settings"));
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::Checkbox(xorstr("Covid FOV Circle"), &Settings.ColorAdjuster);
-			ImGui::SliderFloat(xorstr("##FOV"), &Settings.AimbotFOV, 0, 1000, xorstr("FOV Circle: %.2f"));
-			ImGui::SliderFloat(xorstr("##AimSmooth"), &Settings.smooth1, 0, 5, xorstr("Aim Smooth: %.2f"));
-			//ImGui::EndChild();
-		}
-		void draw_magic_tab()
-		{
-			//ImGui::Columns(1, NULL, false);
-			//ImGui::BeginChild(xorstr("##misc_main_child"), ImVec2(450, 350), true);
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("misc settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
-			ImGui::Text(xorstr("Misc"));
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::Button(("Invisible"));
-			ImGui::SameLine();
-			ImGui::Button(("Visible"));
-			ImGui::Checkbox(xorstr("Spinbot"), &Settings.debug1);
-			ImGui::Checkbox(xorstr("Airstuck"), &Settings.debug2);
-			ImGui::Checkbox(xorstr("Instant Reload"), &Settings.debug3);
-			ImGui::Checkbox(xorstr("Fast Actions"), &Settings.debug4);
-			ImGui::Checkbox(xorstr("Rapid Fire"), &Settings.debug5);
-			ImGui::Checkbox(xorstr("Vehicle Speed [only enable in Vehicle]"), &Settings.debug6);
-			//ImGui::EndChild();
-		}
-		void draw_info_tab()
-		{
-			//ImGui::Columns(1, NULL, false);
-			//ImGui::BeginChild(xorstr("##misc_main_child"), ImVec2(450, 350), true);
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("misc settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
-			ImGui::Text(xorstr("Information"));
-			ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-			ImGui::Text(xorstr("                            Thanks for using this Cheat!"));
-			ImGui::Text(xorstr(""));
-			ImGui::Text(xorstr("                                           Credits"));
-			ImGui::Text(xorstr(""));
-			ImGui::Text(xorstr("                              Menu         :   YTMcGamer#1337"));
-			ImGui::Text(xorstr("                              Exploits    :   Kenny's Cheetos#7872"));
-			ImGui::Text(xorstr("                              Discord    :   discord.gg/rEJKs8"));
 
-			//ImGui::EndChild();
-		}
 		/// 0 = FLAT APPEARENCE
 		/// 1 = MORE "3D" LOOK
 		int is3D = 0;
@@ -689,323 +616,396 @@ __declspec(dllexport) HRESULT PresentHook(IDXGISwapChain* swapChain, UINT syncIn
 		}ImGui::End();
 		ImGui::PopStyleColor();
 	}
+}
+void draw_visuals_tab()
+{
+	//ImGui::Columns(1, NULL, false);
+	//ImGui::BeginChild(xorstr("player_esp_child"), ImVec2(450, 350), true);
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("player visuals"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
+	ImGui::Text(xorstr("player visuals"));
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::Checkbox(xorstr("Covid ESP"), &Settings.ESP.PlayerAmmo);
+	ImGui::Checkbox(xorstr("Covid Crosshair"), &Settings.Crosshair);
+	ImGui::Checkbox(xorstr("Covid Boat ESP"), &Settings.ESP.Boxes);
+	ImGui::Checkbox(xorstr("Covid Ammo ESP"), &Settings.ESP.debug);
+	ImGui::Checkbox(xorstr("Covid Helicopter ESP"), &Settings.ESP.PlayerNames);
+	ImGui::Checkbox(xorstr("Covid Car ESP"), &Settings.ESP.Radar);
+	ImGui::Spacing();
+	//ImGui::EndChild();
+}
+void draw_aimbot_tab()
+{
+	//ImGui::Columns(1, NULL, false);
+	//ImGui::BeginChild(xorstr("##aimbot_main_child"), ImVec2(450, 350), true);
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("aimbot settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
+	ImGui::Text(xorstr("Aimbot"));
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::Checkbox(xorstr("Aimbot"), &Settings.Aimbot);
+	ImGui::Checkbox(xorstr("Silent Aimbot"), &Settings.SilentAimbot);
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("aimbot adjust"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
+	ImGui::Text(xorstr("Aimbot Settings"));
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::Checkbox(xorstr("Covid FOV Circle"), &Settings.ColorAdjuster);
+	ImGui::SliderFloat(xorstr("##FOV"), &Settings.AimbotFOV, 0, 1000, xorstr("FOV Circle: %.2f"));
+	ImGui::SliderFloat(xorstr("##AimSmooth"), &Settings.smooth1, 0, 5, xorstr("Aim Smooth: %.2f"));
+	//ImGui::EndChild();
+}
+void draw_magic_tab()
+{
+	//ImGui::Columns(1, NULL, false);
+	//ImGui::BeginChild(xorstr("##misc_main_child"), ImVec2(450, 350), true);
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("misc settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
+	ImGui::Text(xorstr("Misc"));
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::Button(("Invisible"));
+	ImGui::SameLine();
+	ImGui::Button(("Visible"));
+	ImGui::Checkbox(xorstr("Spinbot"), &Settings.debug1);
+	ImGui::Checkbox(xorstr("Airstuck"), &Settings.debug2);
+	ImGui::Checkbox(xorstr("Instant Reload"), &Settings.debug3);
+	ImGui::Checkbox(xorstr("Fast Actions"), &Settings.debug4);
+	ImGui::Checkbox(xorstr("Rapid Fire"), &Settings.debug5);
+	ImGui::Checkbox(xorstr("Vehicle Speed [only enable in Vehicle]"), &Settings.debug6);
+	//ImGui::EndChild();
+}
+void draw_info_tab()
+{
+	//ImGui::Columns(1, NULL, false);
+	//ImGui::BeginChild(xorstr("##misc_main_child"), ImVec2(450, 350), true);
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("misc settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
+	ImGui::Text(xorstr("Information"));
+	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
+	ImGui::Text(xorstr("                            Thanks for using this Cheat!"));
+	ImGui::Text(xorstr(""));
+	ImGui::Text(xorstr("                                           Credits"));
+	ImGui::Text(xorstr(""));
+	ImGui::Text(xorstr("                              Menu         :   YTMcGamer#1337"));
+	ImGui::Text(xorstr("                              Exploits    :   Kenny's Cheetos#7872"));
+	ImGui::Text(xorstr("                              Discord    :   discord.gg/rEJKs8"));
 
-	auto success = FALSE;
-	do {
-		float closestDistance = FLT_MAX;
-		PVOID closestPawn = NULL;
+	//ImGui::EndChild();
+}
+auto success = FALSE;
+do {
+	float closestDistance = FLT_MAX;
+	PVOID closestPawn = NULL;
 
-		auto world = *Offsets::uWorld;
-		if (!world) break;
+	auto world = *Offsets::uWorld;
+	if (!world) break;
 
-		auto gameInstance = ReadPointer(world, Offsets::Engine::World::OwningGameInstance);
-		if (!gameInstance) break;
+	auto gameInstance = ReadPointer(world, Offsets::Engine::World::OwningGameInstance);
+	if (!gameInstance) break;
 
-		auto localPlayers = ReadPointer(gameInstance, Offsets::Engine::GameInstance::LocalPlayers);
-		if (!localPlayers) break;
+	auto localPlayers = ReadPointer(gameInstance, Offsets::Engine::GameInstance::LocalPlayers);
+	if (!localPlayers) break;
 
-		auto localPlayer = ReadPointer(localPlayers, 0);
-		if (!localPlayer) break;
+	auto localPlayer = ReadPointer(localPlayers, 0);
+	if (!localPlayer) break;
 
-		auto localPlayerController = ReadPointer(localPlayer, Offsets::Engine::Player::PlayerController);
-		if (!localPlayerController) break;
+	auto localPlayerController = ReadPointer(localPlayer, Offsets::Engine::Player::PlayerController);
+	if (!localPlayerController) break;
 
-		auto localPlayerPawn = reinterpret_cast<UObject*>(ReadPointer(localPlayerController, Offsets::Engine::PlayerController::AcknowledgedPawn));
-		if (!localPlayerPawn) break;
+	auto localPlayerPawn = reinterpret_cast<UObject*>(ReadPointer(localPlayerController, Offsets::Engine::PlayerController::AcknowledgedPawn));
+	if (!localPlayerPawn) break;
 
-		auto localPlayerWeapon = ReadPointer(localPlayerPawn, Offsets::FortniteGame::FortPawn::CurrentWeapon);
-		if (!localPlayerWeapon) break;
+	auto localPlayerWeapon = ReadPointer(localPlayerPawn, Offsets::FortniteGame::FortPawn::CurrentWeapon);
+	if (!localPlayerWeapon) break;
 
-		auto localPlayerRoot = ReadPointer(localPlayerPawn, Offsets::Engine::Actor::RootComponent);
-		if (!localPlayerRoot) break;
+	auto localPlayerRoot = ReadPointer(localPlayerPawn, Offsets::Engine::Actor::RootComponent);
+	if (!localPlayerRoot) break;
 
-		auto localPlayerState = ReadPointer(localPlayerPawn, Offsets::Engine::Pawn::PlayerState);
-		if (!localPlayerState) break;
+	auto localPlayerState = ReadPointer(localPlayerPawn, Offsets::Engine::Pawn::PlayerState);
+	if (!localPlayerState) break;
 
-		auto localPlayerLocation = reinterpret_cast<float*>(reinterpret_cast<PBYTE>(localPlayerRoot) + Offsets::Engine::SceneComponent::RelativeLocation);
-		auto localPlayerTeamIndex = ReadDWORD(localPlayerState, Offsets::FortniteGame::FortPlayerStateAthena::TeamIndex);
+	auto localPlayerLocation = reinterpret_cast<float*>(reinterpret_cast<PBYTE>(localPlayerRoot) + Offsets::Engine::SceneComponent::RelativeLocation);
+	auto localPlayerTeamIndex = ReadDWORD(localPlayerState, Offsets::FortniteGame::FortPlayerStateAthena::TeamIndex);
 
-		auto weaponName = Util::GetObjectFirstName((UObject*)localPlayerWeapon);
-		auto isProjectileWeapon = wcsstr(weaponName.c_str(), L"Rifle_Sniper");
+	auto weaponName = Util::GetObjectFirstName((UObject*)localPlayerWeapon);
+	auto isProjectileWeapon = wcsstr(weaponName.c_str(), L"Rifle_Sniper");
 
-		Core::LocalPlayerPawn = localPlayerPawn;
-		Core::LocalPlayerController = localPlayerController;
+	Core::LocalPlayerPawn = localPlayerPawn;
+	Core::LocalPlayerController = localPlayerController;
 
-		std::vector<PVOID> playerPawns;
-		for (auto li = 0UL; li < ReadDWORD(world, Offsets::Engine::World::Levels + sizeof(PVOID)); ++li) {
-			auto levels = ReadPointer(world, 0x148);//Levels
-			if (!levels) break;
+	std::vector<PVOID> playerPawns;
+	for (auto li = 0UL; li < ReadDWORD(world, Offsets::Engine::World::Levels + sizeof(PVOID)); ++li) {
+		auto levels = ReadPointer(world, 0x148);//Levels
+		if (!levels) break;
 
-			auto level = ReadPointer(levels, li * sizeof(PVOID));
-			if (!level) continue;
+		auto level = ReadPointer(levels, li * sizeof(PVOID));
+		if (!level) continue;
 
-			for (auto ai = 0UL; ai < ReadDWORD(level, Offsets::Engine::Level::AActors + sizeof(PVOID)); ++ai) {
-				auto actors = ReadPointer(level, Offsets::Engine::Level::AActors);
-				if (!actors) break;
+		for (auto ai = 0UL; ai < ReadDWORD(level, Offsets::Engine::Level::AActors + sizeof(PVOID)); ++ai) {
+			auto actors = ReadPointer(level, Offsets::Engine::Level::AActors);
+			if (!actors) break;
 
-				auto pawn = reinterpret_cast<UObject*>(ReadPointer(actors, ai * sizeof(PVOID)));
-				if (!pawn || pawn == localPlayerPawn) continue;
+			auto pawn = reinterpret_cast<UObject*>(ReadPointer(actors, ai * sizeof(PVOID)));
+			if (!pawn || pawn == localPlayerPawn) continue;
 
-				auto name = Util::GetObjectFirstName(pawn);
-				if (wcsstr(name.c_str(), L"PlayerPawn_Athena_C") || wcsstr(name.c_str(), L"PlayerPawn_Athena_Phoebe_C")) {
-					playerPawns.push_back(pawn);
-				}
-				else if (wcsstr(name.c_str(), L"FortPickupAthena")) {
-					auto item = ReadPointer(pawn, Offsets::FortniteGame::FortPickup::PrimaryPickupItemEntry + Offsets::FortniteGame::FortItemEntry::ItemDefinition);
-					if (!item) continue;
+			auto name = Util::GetObjectFirstName(pawn);
+			if (wcsstr(name.c_str(), L"PlayerPawn_Athena_C") || wcsstr(name.c_str(), L"PlayerPawn_Athena_Phoebe_C")) {
+				playerPawns.push_back(pawn);
+			}
+			else if (wcsstr(name.c_str(), L"FortPickupAthena")) {
+				auto item = ReadPointer(pawn, Offsets::FortniteGame::FortPickup::PrimaryPickupItemEntry + Offsets::FortniteGame::FortItemEntry::ItemDefinition);
+				if (!item) continue;
 
-					auto itemName = reinterpret_cast<FText*>(ReadPointer(item, Offsets::FortniteGame::FortItemDefinition::DisplayName));
-					if (!itemName || !itemName->c_str()) continue;
+				auto itemName = reinterpret_cast<FText*>(ReadPointer(item, Offsets::FortniteGame::FortItemDefinition::DisplayName));
+				if (!itemName || !itemName->c_str()) continue;
 
-					auto isAmmo = wcsstr(itemName->c_str(), L"Ammo: ");
-					if ((!Settings.ESP.Ammo && isAmmo) || ((!Settings.ESP.Weapons || ReadBYTE(item, Offsets::FortniteGame::FortItemDefinition::Tier) < Settings.ESP.MinWeaponTier) && !isAmmo)) continue;
+				auto isAmmo = wcsstr(itemName->c_str(), L"Ammo: ");
+				if ((!Settings.ESP.Ammo && isAmmo) || ((!Settings.ESP.Weapons || ReadBYTE(item, Offsets::FortniteGame::FortItemDefinition::Tier) < Settings.ESP.MinWeaponTier) && !isAmmo)) continue;
 
-					CHAR text[0xFF] = { 0 };
-					wcstombs(text, itemName->c_str() + (isAmmo ? 6 : 0), sizeof(text));
+				CHAR text[0xFF] = { 0 };
+				wcstombs(text, itemName->c_str() + (isAmmo ? 6 : 0), sizeof(text));
 
-					AddMarker(window, width, height, localPlayerLocation, pawn, text, isAmmo ? ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }) : ImGui::GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
-				}
-				else if (Settings.ESP.Containers && wcsstr(name.c_str(), L"Tiered_Chest") && !((ReadBYTE(pawn, Offsets::FortniteGame::BuildingContainer::bAlreadySearched) >> 7) & 1)) {
-					AddMarker(window, width, height, localPlayerLocation, pawn, "Chest", ImGui::GetColorU32({ 1.0f, 0.84f, 0.0f, 1.0f }));
-				}
-				else if (Settings.ESP.Containers && wcsstr(name.c_str(), L"AthenaSupplyDrop_Llama")) {
-					AddMarker(window, width, height, localPlayerLocation, pawn, "Llama", ImGui::GetColorU32({ 1.0f, 0.0f, 0.0f, 1.0f }));
-				}
-				else if (Settings.ESP.Ammo && wcsstr(name.c_str(), L"Tiered_Ammo") && !((ReadBYTE(pawn, Offsets::FortniteGame::BuildingContainer::bAlreadySearched) >> 7) & 1)) {
-					AddMarker(window, width, height, localPlayerLocation, pawn, "Ammo Box", ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }));
-				}
+				AddMarker(window, width, height, localPlayerLocation, pawn, text, isAmmo ? ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }) : ImGui::GetColorU32({ 1.0f, 1.0f, 1.0f, 1.0f }));
+			}
+			else if (Settings.ESP.Containers && wcsstr(name.c_str(), L"Tiered_Chest") && !((ReadBYTE(pawn, Offsets::FortniteGame::BuildingContainer::bAlreadySearched) >> 7) & 1)) {
+				AddMarker(window, width, height, localPlayerLocation, pawn, "Chest", ImGui::GetColorU32({ 1.0f, 0.84f, 0.0f, 1.0f }));
+			}
+			else if (Settings.ESP.Containers && wcsstr(name.c_str(), L"AthenaSupplyDrop_Llama")) {
+				AddMarker(window, width, height, localPlayerLocation, pawn, "Llama", ImGui::GetColorU32({ 1.0f, 0.0f, 0.0f, 1.0f }));
+			}
+			else if (Settings.ESP.Ammo && wcsstr(name.c_str(), L"Tiered_Ammo") && !((ReadBYTE(pawn, Offsets::FortniteGame::BuildingContainer::bAlreadySearched) >> 7) & 1)) {
+				AddMarker(window, width, height, localPlayerLocation, pawn, "Ammo Box", ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }));
 			}
 		}
-		printf("\nplayer pawns : %p.", playerPawns);
+	}
+	printf("\nplayer pawns : %p.", playerPawns);
 
-		for (auto pawn : playerPawns)
-		{
-			auto state = ReadPointer(pawn, 0x238);
-			if (!state) continue;
+	for (auto pawn : playerPawns)
+	{
+		auto state = ReadPointer(pawn, 0x238);
+		if (!state) continue;
 
-			auto mesh = ReadPointer(pawn, 0x278);
-			if (!mesh) continue;
+		auto mesh = ReadPointer(pawn, 0x278);
+		if (!mesh) continue;
 
-			auto bones = ReadPointer(mesh, 0x420);
-			if (!bones) bones = ReadPointer(mesh, 0x420 + 0x10);
-			if (!bones) continue;
+		auto bones = ReadPointer(mesh, 0x420);
+		if (!bones) bones = ReadPointer(mesh, 0x420 + 0x10);
+		if (!bones) continue;
 
-			float compMatrix[4][4] = { 0 };
-			Util::ToMatrixWithScale(reinterpret_cast<float*>(reinterpret_cast<PBYTE>(mesh) + 0x1C0), compMatrix);
+		float compMatrix[4][4] = { 0 };
+		Util::ToMatrixWithScale(reinterpret_cast<float*>(reinterpret_cast<PBYTE>(mesh) + 0x1C0), compMatrix);
 
-			// Top
-			float head[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 66, head);
+		// Top
+		float head[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 66, head);
 
-			float neck[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 65, neck);
+		float neck[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 65, neck);
 
-			float chest[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 36, chest);
+		float chest[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 36, chest);
 
-			float pelvis[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 2, pelvis);
+		float pelvis[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 2, pelvis);
 
-			// Arms
-			float leftShoulder[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 9, leftShoulder);
+		// Arms
+		float leftShoulder[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 9, leftShoulder);
 
-			float rightShoulder[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 62, rightShoulder);
+		float rightShoulder[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 62, rightShoulder);
 
-			float leftElbow[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 10, leftElbow);
+		float leftElbow[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 10, leftElbow);
 
-			float rightElbow[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 38, rightElbow);
+		float rightElbow[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 38, rightElbow);
 
-			float leftHand[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 11, leftHand);
+		float leftHand[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 11, leftHand);
 
-			float rightHand[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 39, rightHand);
+		float rightHand[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 39, rightHand);
 
-			// Legs
-			float leftLeg[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 67, leftLeg);
+		// Legs
+		float leftLeg[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 67, leftLeg);
 
-			float rightLeg[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 74, rightLeg);
+		float rightLeg[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 74, rightLeg);
 
-			float leftThigh[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 73, leftThigh);
+		float leftThigh[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 73, leftThigh);
 
-			float rightThigh[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 80, rightThigh);
+		float rightThigh[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 80, rightThigh);
 
-			float leftFoot[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 68, leftFoot);
+		float leftFoot[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 68, leftFoot);
 
-			float rightFoot[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 75, rightFoot);
+		float rightFoot[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 75, rightFoot);
 
-			float leftFeet[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 71, leftFeet);
+		float leftFeet[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 71, leftFeet);
 
-			float rightFeet[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 78, rightFeet);
+		float rightFeet[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 78, rightFeet);
 
-			float leftFeetFinger[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 72, leftFeetFinger);
+		float leftFeetFinger[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 72, leftFeetFinger);
 
-			float rightFeetFinger[3] = { 0 };
-			Util::GetBoneLocation(compMatrix, bones, 79, rightFeetFinger);
+		float rightFeetFinger[3] = { 0 };
+		Util::GetBoneLocation(compMatrix, bones, 79, rightFeetFinger);
 
-			auto color = ImGui::GetColorU32({ Settings.ESP.PlayerNotVisibleColor[0], Settings.ESP.PlayerNotVisibleColor[1], Settings.ESP.PlayerNotVisibleColor[2], 1.0f });
-			FVector viewPoint = { 0 };
+		auto color = ImGui::GetColorU32({ Settings.ESP.PlayerNotVisibleColor[0], Settings.ESP.PlayerNotVisibleColor[1], Settings.ESP.PlayerNotVisibleColor[2], 1.0f });
+		FVector viewPoint = { 0 };
 
-			if (ReadDWORD(state, 0xE60) == localPlayerTeamIndex) {
-				color = ImGui::GetColorU32({ 0.0f, 1.0f, 0.0f, 1.0f });
+		if (ReadDWORD(state, 0xE60) == localPlayerTeamIndex) {
+			color = ImGui::GetColorU32({ 0.0f, 1.0f, 0.0f, 1.0f });
+		}
+		else if ((ReadBYTE(pawn, Offsets::FortniteGame::FortPawn::bIsDBNO) & 1) && (isProjectileWeapon || Util::LineOfSightTo(localPlayerController, pawn, &viewPoint))) {
+			color = ImGui::GetColorU32({ Settings.ESP.PlayerVisibleColor[0], Settings.ESP.PlayerVisibleColor[1], Settings.ESP.PlayerVisibleColor[2], 1.0f });
+			if (Settings.AutoAimbot) {
+				auto dx = head[0] - localPlayerLocation[0];
+				auto dy = head[1] - localPlayerLocation[1];
+				auto dz = head[2] - localPlayerLocation[2];
+				auto dist = dx * dx + dy * dy + dz * dz;
+				if (dist < closestDistance) {
+					closestDistance = dist;
+					closestPawn = pawn;
+				}
 			}
-			else if ((ReadBYTE(pawn, Offsets::FortniteGame::FortPawn::bIsDBNO) & 1) && (isProjectileWeapon || Util::LineOfSightTo(localPlayerController, pawn, &viewPoint))) {
-				color = ImGui::GetColorU32({ Settings.ESP.PlayerVisibleColor[0], Settings.ESP.PlayerVisibleColor[1], Settings.ESP.PlayerVisibleColor[2], 1.0f });
-				if (Settings.AutoAimbot) {
-					auto dx = head[0] - localPlayerLocation[0];
-					auto dy = head[1] - localPlayerLocation[1];
-					auto dz = head[2] - localPlayerLocation[2];
-					auto dist = dx * dx + dy * dy + dz * dz;
-					if (dist < closestDistance) {
+			else
+			{
+				auto w2s = *reinterpret_cast<FVector*>(head);
+				if (Util::WorldToScreen(width, height, &w2s.X)) {
+					auto dx = w2s.X - (width / 2);
+					auto dy = w2s.Y - (height / 2);
+					auto dist = Util::SpoofCall(sqrtf, dx * dx + dy * dy);
+					if (dist < Settings.AimbotFOV && dist < closestDistance) {
 						closestDistance = dist;
 						closestPawn = pawn;
 					}
 				}
-				else
-				{
-					auto w2s = *reinterpret_cast<FVector*>(head);
-					if (Util::WorldToScreen(width, height, &w2s.X)) {
-						auto dx = w2s.X - (width / 2);
-						auto dy = w2s.Y - (height / 2);
-						auto dist = Util::SpoofCall(sqrtf, dx * dx + dy * dy);
-						if (dist < Settings.AimbotFOV && dist < closestDistance) {
-							closestDistance = dist;
-							closestPawn = pawn;
-						}
-					}
-				}
 			}
+		}
 
-			if (!Settings.ESP.Players) continue;
+		if (!Settings.ESP.Players) continue;
 
-			if (Settings.ESP.PlayerLines) {
-				auto end = *reinterpret_cast<FVector*>(head);
-				if (Util::WorldToScreen(width, height, &end.X)) {
-					window.DrawList->AddLine(ImVec2(width / 2, height), ImVec2(end.X, end.Y), color);
-				}
+		if (Settings.ESP.PlayerLines) {
+			auto end = *reinterpret_cast<FVector*>(head);
+			if (Util::WorldToScreen(width, height, &end.X)) {
+				window.DrawList->AddLine(ImVec2(width / 2, height), ImVec2(end.X, end.Y), color);
 			}
+		}
 
-			float minX = FLT_MAX;
-			float maxX = -FLT_MAX;
-			float minY = FLT_MAX;
-			float maxY = -FLT_MAX;
+		float minX = FLT_MAX;
+		float maxX = -FLT_MAX;
+		float minY = FLT_MAX;
+		float maxY = -FLT_MAX;
 
-			AddLine(window, width, height, head, neck, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, neck, pelvis, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, chest, leftShoulder, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, chest, rightShoulder, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftShoulder, leftElbow, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightShoulder, rightElbow, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftElbow, leftHand, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightElbow, rightHand, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, pelvis, leftLeg, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, pelvis, rightLeg, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftLeg, leftThigh, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightLeg, rightThigh, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftThigh, leftFoot, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightThigh, rightFoot, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftFoot, leftFeet, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightFoot, rightFeet, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, leftFeet, leftFeetFinger, color, minX, maxX, minY, maxY);
-			AddLine(window, width, height, rightFeet, rightFeetFinger, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, head, neck, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, neck, pelvis, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, chest, leftShoulder, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, chest, rightShoulder, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftShoulder, leftElbow, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightShoulder, rightElbow, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftElbow, leftHand, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightElbow, rightHand, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, pelvis, leftLeg, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, pelvis, rightLeg, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftLeg, leftThigh, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightLeg, rightThigh, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftThigh, leftFoot, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightThigh, rightFoot, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftFoot, leftFeet, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightFoot, rightFeet, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, leftFeet, leftFeetFinger, color, minX, maxX, minY, maxY);
+		AddLine(window, width, height, rightFeet, rightFeetFinger, color, minX, maxX, minY, maxY);
 
-			if (minX < width && maxX > 0 && minY < height && maxY > 0) {
-				auto topLeft = ImVec2(minX - 3.0f, minY - 3.0f);
-				auto bottomRight = ImVec2(maxX + 3.0f, maxY + 3.0f);
+		if (minX < width && maxX > 0 && minY < height && maxY > 0) {
+			auto topLeft = ImVec2(minX - 3.0f, minY - 3.0f);
+			auto bottomRight = ImVec2(maxX + 3.0f, maxY + 3.0f);
 
-				window.DrawList->AddRectFilled(topLeft, bottomRight, ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.20f }));
-				window.DrawList->AddRect(topLeft, bottomRight, ImGui::GetColorU32({ 0.0f, 0.50f, 0.90f, 1.0f }), 0.5, 15, 1.5f);
+			window.DrawList->AddRectFilled(topLeft, bottomRight, ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.20f }));
+			window.DrawList->AddRect(topLeft, bottomRight, ImGui::GetColorU32({ 0.0f, 0.50f, 0.90f, 1.0f }), 0.5, 15, 1.5f);
 
-				if (Settings.ESP.PlayerNames) {
-					FString playerName;
-					Core::ProcessEvent(state, Offsets::Engine::PlayerState::GetPlayerName, &playerName, 0);
-					if (playerName.c_str()) {
-						CHAR copy[0xFF] = { 0 };
-						wcstombs(copy, playerName.c_str(), sizeof(copy));
-						Util::FreeInternal(playerName.c_str());
+			if (Settings.ESP.PlayerNames) {
+				FString playerName;
+				Core::ProcessEvent(state, Offsets::Engine::PlayerState::GetPlayerName, &playerName, 0);
+				if (playerName.c_str()) {
+					CHAR copy[0xFF] = { 0 };
+					wcstombs(copy, playerName.c_str(), sizeof(copy));
+					Util::FreeInternal(playerName.c_str());
 
-						auto centerTop = ImVec2((topLeft.x + bottomRight.x) / 2.0f, topLeft.y);
-						auto size = ImGui::GetFont()->CalcTextSizeA(window.DrawList->_Data->FontSize, FLT_MAX, 0, copy);
-						window.DrawList->AddRectFilled(ImVec2(centerTop.x - size.x / 2.0f, centerTop.y - size.y + 3.0f), ImVec2(centerTop.x + size.x / 2.0f, centerTop.y), ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.4f }));
-						window.DrawList->AddText(ImVec2(centerTop.x - size.x / 2.0f, centerTop.y - size.y), color, copy);
-					}
+					auto centerTop = ImVec2((topLeft.x + bottomRight.x) / 2.0f, topLeft.y);
+					auto size = ImGui::GetFont()->CalcTextSizeA(window.DrawList->_Data->FontSize, FLT_MAX, 0, copy);
+					window.DrawList->AddRectFilled(ImVec2(centerTop.x - size.x / 2.0f, centerTop.y - size.y + 3.0f), ImVec2(centerTop.x + size.x / 2.0f, centerTop.y), ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.4f }));
+					window.DrawList->AddText(ImVec2(centerTop.x - size.x / 2.0f, centerTop.y - size.y), color, copy);
 				}
 			}
 		}
-
-		if (Settings.Aimbot && closestPawn && Util::SpoofCall(GetAsyncKeyState, VK_RBUTTON) < 0 && Util::SpoofCall(GetForegroundWindow) == hWnd) {
-			Core::TargetPawn = closestPawn;
-			Core::NoSpread = FALSE;
-			//printf("\nworked?");
-		}
-		else {
-			Core::TargetPawn = nullptr;
-			Core::NoSpread = FALSE;
-		}
-		if (!Settings.AutoAimbot && Settings.ESP.AimbotFOV) {
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.20f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 1, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.20f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 2, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.18f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 3, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.18f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 4, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.16f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 5, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.16f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 6, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.14f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 7, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.14f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 8, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 9, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 10, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 11, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 12, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 13, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 14, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 15, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 16, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 17, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 18, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 19, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 20, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 21, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 22, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 23, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 24, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 25, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 26, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 27, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 28, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105);
-			window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, +29, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105); {
-			}
-		}
-
-		/*printf("\nLocalPlayerController : %p.", Core::LocalPlayerController);
-		printf("\nSetControlRotation : %p.", Offsets::Engine::Controller::SetControlRotation);
-		printf("\n Target Pawn : %p.", Core::TargetPawn);
-		printf("\nClosest Pawn %p.", closestPawn);
-		auto currentRotation = Util::GetViewInfo().Rotation;
-		printf("\nCurrent Rotation : %p.", currentRotation);
-		printf("\nClosest Pawn : %p.", closestPawn); */
-		//AddMarker(window, width / 2, height / 2, 120 , pawn ,"not made by impur", ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }))l
-		success = TRUE;
-	} while (FALSE);
-
-	if (!success) {
-		Core::LocalPlayerController = Core::LocalPlayerPawn = Core::TargetPawn = nullptr;
 	}
-	EndScene(window);
-	//// i had a sleep here :(
-	return PresentOriginal(swapChain, syncInterval, flags);
+
+	if (Settings.Aimbot && closestPawn && Util::SpoofCall(GetAsyncKeyState, VK_RBUTTON) < 0 && Util::SpoofCall(GetForegroundWindow) == hWnd) {
+		Core::TargetPawn = closestPawn;
+		Core::NoSpread = FALSE;
+		//printf("\nworked?");
+	}
+	else {
+		Core::TargetPawn = nullptr;
+		Core::NoSpread = FALSE;
+	}
+	if (!Settings.AutoAimbot && Settings.ESP.AimbotFOV) {
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.20f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 1, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.20f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 2, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.18f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 3, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.18f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 4, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.16f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 5, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.16f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 6, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.14f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 7, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.14f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 8, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 9, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 10, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.12f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 11, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 12, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 13, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.10f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 14, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 15, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 16, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.08f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 17, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 18, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 19, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.06f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 20, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 21, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 22, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.04f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 23, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 24, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 25, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.02f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 26, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 27, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 28, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105);
+		window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, +29, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105); {
+		}
+	}
+
+	/*printf("\nLocalPlayerController : %p.", Core::LocalPlayerController);
+	printf("\nSetControlRotation : %p.", Offsets::Engine::Controller::SetControlRotation);
+	printf("\n Target Pawn : %p.", Core::TargetPawn);
+	printf("\nClosest Pawn %p.", closestPawn);
+	auto currentRotation = Util::GetViewInfo().Rotation;
+	printf("\nCurrent Rotation : %p.", currentRotation);
+	printf("\nClosest Pawn : %p.", closestPawn); */
+	//AddMarker(window, width / 2, height / 2, 120 , pawn ,"not made by impur", ImGui::GetColorU32({ 0.75f, 0.75f, 0.75f, 1.0f }))l
+	success = TRUE;
+} while (FALSE);
+
+if (!success) {
+	Core::LocalPlayerController = Core::LocalPlayerPawn = Core::TargetPawn = nullptr;
+}
+EndScene(window);
+//// i had a sleep here :(
+return PresentOriginal(swapChain, syncInterval, flags);
 }
 
 __declspec(dllexport) HRESULT ResizeHook(IDXGISwapChain* swapChain, UINT bufferCount, UINT width, UINT height, DXGI_FORMAT newFormat, UINT swapChainFlags) {
