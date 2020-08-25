@@ -100,28 +100,78 @@ T WriteMem(DWORD_PTR address, T value)
 
 namespace renderr
 {
-	/*T WriteMem(DWORD_PTR address, T value)
-	{
-		return *(T*)address = value;
-	}*/
-
-	BOOLEAN showMenu = TRUE;
-
 	ID3D11Device* device = nullptr;
 	ID3D11DeviceContext* immediateContext = nullptr;
 	ID3D11RenderTargetView* renderTargetView = nullptr;
 
-	WNDPROC WndProcOriginal = nullptr;
 	HRESULT(*PresentOriginal)(IDXGISwapChain* swapChain, UINT syncInterval, UINT flags) = nullptr;
 	HRESULT(*ResizeOriginal)(IDXGISwapChain* swapChain, UINT bufferCount, UINT width, UINT height, DXGI_FORMAT newFormat, UINT swapChainFlags) = nullptr;
+	WNDPROC oWndProc;
+
+	extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+	static bool ShowMenu = true;
+
+	VOID AddMarker(ImGuiWindow& window, float width, float height, float* start, PVOID pawn, LPCSTR text, ImU32 color) {
+		float minX = FLT_MAX;
+		float maxX = -FLT_MAX;
+		float minY = FLT_MAX;
+		float maxY = -FLT_MAX;
+		if (minX < width && maxX > 0 && minY < height && maxY > 0) {
+			auto topLeft = ImVec2(minX - 3.0f, minY - 3.0f);
+			auto bottomRight = ImVec2(maxX + 3.0f, maxY + 3.0f);
+			auto centerTop = ImVec2((topLeft.x + bottomRight.x) / 2.0f, topLeft.y);
+			auto root = Util::GetPawnRootLocation(pawn);
+			if (root) {
+				auto pos = *root;
+				float dx = start[0] - pos.X;
+				float dy = start[1] - pos.Y;
+				float dz = start[2] - pos.Z;
+
+				if (Util::WorldToScreen(width, height, &pos.X)) {
+					float dist = Util::SpoofCall(sqrtf, dx * dx + dy * dy + dz * dz) / 1000.0f;
+
+					CHAR modified[0xFF] = { 0 };
+					snprintf(modified, sizeof(modified), ("%s\n  %dm"), text, static_cast<INT>(dist));
+
+					auto size = ImGui::GetFont()->CalcTextSizeA(window.DrawList->_Data->FontSize, FLT_MAX, 0, modified);
+					window.DrawList->AddRectFilled(ImVec2(centerTop.x - size.x / 2.0f, centerTop.y - size.y + 3.0f), ImVec2(centerTop.x + size.x / 2.0f, centerTop.y), ImGui::GetColorU32({ 0.0f, 0.0f, 0.0f, 0.4f }));
+					window.DrawList->AddText(ImVec2(pos.X - size.x / 2.0f, pos.Y - size.y / 2.0f), color, modified);
+				}
+			}
+		}
+	}
+	__declspec(dllexport) LRESULT CALLBACK WndProcHook(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+		if (msg == WM_KEYUP && (wParam == VK_INSERT || (ShowMenu && wParam == VK_ESCAPE))) {
+			ShowMenu = !ShowMenu;
+			ImGui::GetIO().MouseDrawCursor = ShowMenu;
+		}
+		else if (msg == WM_QUIT && ShowMenu) {
+			ExitProcess(0);
+		}
+
+		if (ShowMenu) {
+			ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
+			return TRUE;
+		}
+
+		return CallWindowProc(oWndProc, hWnd, msg, wParam, lParam);
+	}
+
+	extern uint64_t base_address = 0;
+	DWORD processID;
+	const ImVec4 color = { 255.0,255.0,255.0,1 };
+	const ImVec4 red = { 0.65,0,0,1 };
+	const ImVec4 white = { 255.0,255.0,255.0,1 };
+	const ImVec4 green = { 0.03,0.81,0.14,1 };
+	const ImVec4 blue = { 0.21960784313,0.56470588235,0.90980392156,1.0 };
 
 	ImGuiWindow& BeginScene() {
 		ImGui_ImplDX11_NewFrame();
-
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
 		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0));
-		ImGui::Begin(xorstr("##scene"), nullptr, ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoTitleBar);
+		ImGui::Begin(("##scene"), nullptr, ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoTitleBar);
 
 		auto& io = ImGui::GetIO();
 		ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
@@ -130,57 +180,18 @@ namespace renderr
 		return *ImGui::GetCurrentWindow();
 	}
 
-	float color_red = 1.;
-	float color_green = 0;
-	float color_blue = 0;
-	float color_random = 0.0;
-	float color_speed = -10.0;
-
-	void ColorChange()
-	{
-		static float Color[3];
-		static DWORD Tickcount = 0;
-		static DWORD Tickcheck = 0;
-		ImGui::ColorConvertRGBtoHSV(color_red, color_green, color_blue, Color[0], Color[1], Color[2]);
-		if (GetTickCount() - Tickcount >= 1)
-		{
-			if (Tickcheck != Tickcount)
-			{
-				Color[0] += 0.001f * color_speed;
-				Tickcheck = Tickcount;
-			}
-			Tickcount = GetTickCount();
-		}
-		if (Color[0] < 0.0f) Color[0] += 1.0f;
-		ImGui::ColorConvertHSVtoRGB(Color[0], Color[1], Color[2], color_red, color_green, color_blue);
-	}
-
-	VOID EndScene(ImGuiWindow& window)
-	{
-		ColorChange();
+	VOID EndScene(ImGuiWindow& window) {
 		window.DrawList->PushClipRectFullScreen();
-		ImGui::End();
+		//ImGui::End();
 		ImGui::PopStyleColor();
 		ImGui::PopStyleVar(2);
-
-		ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.06f, 0.06f, 0.06f, 1.f));
-		static int tab = 0;
-
-		if (showMenu)
-		{
-			{
-			}
-			ImGui::End();
-		}
-		ImGui::PopStyleColor();
 		ImGui::Render();
 	}
-
 	VOID AddLine(ImGuiWindow& window, float width, float height, float a[3], float b[3], ImU32 color, float& minX, float& maxX, float& minY, float& maxY) {
 		float ac[3] = { a[0], a[1], a[2] };
 		float bc[3] = { b[0], b[1], b[2] };
 		if (Util::WorldToScreen(width, height, ac) && Util::WorldToScreen(width, height, bc)) {
-			window.DrawList->AddLine(ImVec2(ac[0], ac[1]), ImVec2(bc[0], bc[1]), color, 1.0f);
+			window.DrawList->AddLine(ImVec2(ac[0], ac[1]), ImVec2(bc[0], bc[1]), color, 2.0f);
 
 			minX = min(ac[0], minX);
 			minX = min(bc[0], minX);
@@ -195,239 +206,172 @@ namespace renderr
 			maxY = max(bc[1], maxY);
 		}
 	}
-	float player_esp_color[4] = { 255, 255, 255, 255 };
-	VOID AddMarker(ImGuiWindow& window, float width, float height, float* start, PVOID pawn, LPCSTR text, ImU32 color) {
-		auto root = Util::GetPawnRootLocation(pawn);
-		if (root) {
-			auto pos = *root;
-			float dx = start[0] - pos.X;
-			float dy = start[1] - pos.Y;
-			float dz = start[2] - pos.Z;
-
-			if (Util::WorldToScreen(width, height, &pos.X)) {
-				float dist = Util::SpoofCall(sqrtf, dx * dx + dy * dy + dz * dz) / 100.0f;
-
-				if (dist < 250)
-				{
-					CHAR modified[0xFF] = { 0 };
-					snprintf(modified, sizeof(modified), xorstr("%s [%dm]"), text, static_cast<INT>(dist));
-
-					auto size = ImGui::GetFont()->CalcTextSizeA(window.DrawList->_Data->FontSize, FLT_MAX, 0, modified);
-					window.DrawList->AddText(ImVec2(pos.X - size.x / 2.0f, pos.Y - size.y / 2.0f), ImGui::GetColorU32(color), modified);
-				}
-			}
-		}
-	}
-
-	float DrawOutlinedText(ImFont* pFont, const std::string& text, const ImVec2& pos, float size, ImU32 color, bool center)
-	{
-		ImGuiWindow* window = ImGui::GetCurrentWindow();
-
-		//std::stringstream stream(text);
-		//std::string line;
-
-		float y = 0.0f;
-		int i = 0;
-
-		/*while (std::getline(stream, line))
-		{
-			ImVec2 textSize = pFont->CalcTextSizeA(size, FLT_MAX, 0.0f, line.c_str());
-
-			if (center)
-			{
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x - textSize.x / 2.0f) + 1, (pos.y + textSize.y * i) + 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x - textSize.x / 2.0f) - 1, (pos.y + textSize.y * i) - 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x - textSize.x / 2.0f) + 1, (pos.y + textSize.y * i) - 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x - textSize.x / 2.0f) - 1, (pos.y + textSize.y * i) + 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-
-				window->DrawList->AddText(pFont, size, ImVec2(pos.x - textSize.x / 2.0f, pos.y + textSize.y * i), ImGui::GetColorU32(color), line.c_str());
-			}
-			else
-			{
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x) + 1, (pos.y + textSize.y * i) + 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x) - 1, (pos.y + textSize.y * i) - 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x) + 1, (pos.y + textSize.y * i) - 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-				window->DrawList->AddText(pFont, size, ImVec2((pos.x) - 1, (pos.y + textSize.y * i) + 1), ImGui::GetColorU32(ImVec4(0, 0, 0, 255)), line.c_str());
-
-				window->DrawList->AddText(pFont, size, ImVec2(pos.x, pos.y + textSize.y * i), ImGui::GetColorU32(color), line.c_str());
-			}
-
-			y = pos.y + textSize.y * (i + 1);
-			i++;
-		}*/
-		return y;
-	}
-	float DrawNormalText(ImFont* pFont, const std::string& text, const ImVec2& pos, float size, ImU32 color, bool center)
-	{
-		ImGuiWindow* window = ImGui::GetCurrentWindow();
-
-		//std::stringstream stream(text);
-		//std::string line;
-
-		float y = 0.0f;
-		int i = 0;
-
-		/*while (std::getline(stream, line))
-		{
-			ImVec2 textSize = pFont->CalcTextSizeA(size, FLT_MAX, 0.0f, line.c_str());
-
-			if (center)
-			{
-				window->DrawList->AddText(pFont, size, ImVec2(pos.x - textSize.x / 2.0f, pos.y + textSize.y * i), ImGui::GetColorU32(color), line.c_str());
-			}
-			else
-			{
-				window->DrawList->AddText(pFont, size, ImVec2(pos.x, pos.y + textSize.y * i), ImGui::GetColorU32(color), line.c_str());
-			}
-
-			y = pos.y + textSize.y * (i + 1);
-			i++;
-		}*/
-		return y;
-	}
-
-	std::string TextFormat(const char* format, ...)
-	{
-		va_list argptr;
-		va_start(argptr, format);
-
-		char buffer[2048];
-		vsprintf(buffer, format, argptr);
-
-		va_end(argptr);
-
-		return buffer;
-	}
-	std::string string_To_UTF8(const std::string& str)
-	{
-		int nwLen = ::MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, NULL, 0);
-
-		wchar_t* pwBuf = new wchar_t[nwLen + 1];
-		ZeroMemory(pwBuf, nwLen * 2 + 2);
-
-		::MultiByteToWideChar(CP_ACP, 0, str.c_str(), str.length(), pwBuf, nwLen);
-
-		int nLen = ::WideCharToMultiByte(CP_UTF8, 0, pwBuf, -1, NULL, NULL, NULL, NULL);
-
-		char* pBuf = new char[nLen + 1];
-		ZeroMemory(pBuf, nLen + 1);
-
-		::WideCharToMultiByte(CP_UTF8, 0, pwBuf, nwLen, pBuf, nLen, NULL, NULL);
-
-		std::string retStr(pBuf);
-
-		delete[]pwBuf;
-		delete[]pBuf;
-
-		pwBuf = NULL;
-		pBuf = NULL;
-
-		return retStr;
-	}
-	void DrawStrokeText(int x, int y, const ImVec4& color, const char* str)
-	{
-		ImFont a;
-		std::string utf_8_1 = std::string(str);
-		std::string utf_8_2 = string_To_UTF8(utf_8_1);
-		ImGui::GetOverlayDrawList()->AddText(ImVec2(x, y - 1), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), utf_8_2.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImVec2(x, y + 1), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), utf_8_2.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImVec2(x - 1, y), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), utf_8_2.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImVec2(x + 1, y), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), utf_8_2.c_str());
-		ImGui::GetOverlayDrawList()->AddText(ImVec2(x, y), ImGui::GetColorU32(color), utf_8_2.c_str());
-	}
-	void DrawRoundedRect(int x, int y, int w, int h, ImU32& color, int thickness)
-	{
-		ImGui::GetOverlayDrawList()->AddRect(ImVec2(x, y), ImVec2(w, h), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 0, 0, 3);
-		ImGui::GetOverlayDrawList()->AddRect(ImVec2(x, y), ImVec2(w, h), ImGui::GetColorU32(color), 0, 0, thickness);
-	}
-	void DrawLine(int x1, int y1, int x2, int y2, const ImVec4& color, int thickness)
-	{
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(x1, y1), ImVec2(x2, y2), ImGui::GetColorU32(color), thickness);
-	}
-	void DrawCorneredBox(int X, int Y, int W, int H, const ImU32& color, int thickness) {
-		float lineW = (W / 3);
-		float lineH = (H / 3);
-
-		//black outlines
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X, Y + lineH), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X + lineW, Y), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y), ImVec2(X + W, Y), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y), ImVec2(X + W, Y + lineH), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H - lineH), ImVec2(X, Y + H), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H), ImVec2(X + lineW, Y + H), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y + H), ImVec2(X + W, Y + H), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y + H - lineH), ImVec2(X + W, Y + H), ImGui::ColorConvertFloat4ToU32(ImVec4(1 / 255.0, 1 / 255.0, 1 / 255.0, 255 / 255.0)), 3);
-
-		//corners
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X, Y + lineH), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y), ImVec2(X + lineW, Y), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y), ImVec2(X + W, Y), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y), ImVec2(X + W, Y + lineH), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H - lineH), ImVec2(X, Y + H), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X, Y + H), ImVec2(X + lineW, Y + H), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W - lineW, Y + H), ImVec2(X + W, Y + H), ImGui::GetColorU32(color), thickness);
-		ImGui::GetOverlayDrawList()->AddLine(ImVec2(X + W, Y + H - lineH), ImVec2(X + W, Y + H), ImGui::GetColorU32(color), thickness);
-	}
-	__declspec(dllexport) LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
-		if (msg == WM_KEYUP && (wParam == VK_INSERT)) {
-			showMenu = !showMenu;
-			ImGui::GetIO().MouseDrawCursor = showMenu;
-		}
-
-		if (showMenu) {
-			ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam);
-			return TRUE;
-		}
-
-		return CallWindowProc(WndProcOriginal, hWnd, msg, wParam, lParam);
-	}
-
-	using f_present = HRESULT(__stdcall*)(IDXGISwapChain* pthis, UINT sync_interval, UINT flags);
-	f_present o_present = nullptr;
-	HRESULT __stdcall hk_present(IDXGISwapChain* pSwapChain, UINT sync_interval, UINT flags)
-	{
+	__declspec(dllexport) HRESULT PresentHook(IDXGISwapChain* swapChain, UINT syncInterval, UINT flags) {
+		static float width = 0;
+		static float height = 0;
 		static HWND hWnd = 0;
-
 		if (!device) {
-			pSwapChain->GetDevice(__uuidof(device), reinterpret_cast<PVOID*>(&device));
+			swapChain->GetDevice(__uuidof(device), reinterpret_cast<PVOID*>(&device));
 			device->GetImmediateContext(&immediateContext);
 
 			ID3D11Texture2D* renderTarget = nullptr;
-			pSwapChain->GetBuffer(0, __uuidof(renderTarget), reinterpret_cast<PVOID*>(&renderTarget));
+			swapChain->GetBuffer(0, __uuidof(renderTarget), reinterpret_cast<PVOID*>(&renderTarget));
 			device->CreateRenderTargetView(renderTarget, nullptr, &renderTargetView);
 			renderTarget->Release();
 
 			ID3D11Texture2D* backBuffer = 0;
-			pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (PVOID*)&backBuffer);
+			swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (PVOID*)&backBuffer);
 			D3D11_TEXTURE2D_DESC backBufferDesc = { 0 };
 			backBuffer->GetDesc(&backBufferDesc);
 
-			hWnd = FindWindow(xorstr(L"UnrealWindow"), xorstr(L"Fortnite  "));
+			hWnd = FindWindow((L"UnrealWindow"), (L"Fortnite  "));
 			if (!width) {
-				WndProcOriginal = reinterpret_cast<WNDPROC>(SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProc)));
+				oWndProc = reinterpret_cast<WNDPROC>(SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WndProcHook)));
 			}
 
 			width = (float)backBufferDesc.Width;
 			height = (float)backBufferDesc.Height;
 			backBuffer->Release();
 
-			m_pFont = ImGui::GetIO().Fonts->AddFontFromFileTTF(xorstr("C:\\font.ttf"), 16.0f);
-
-			if (m_pFont == NULL)
-			{
-				MessageBoxA(0, xorstr("couldn't find the font."), xorstr("neutron"), MB_ICONERROR);
-				exit(0);
-			}
+			ImGui::GetIO().Fonts->AddFontFromFileTTF(("C:\\Windows\\Fonts\\arialbd.ttf"), 12.0f);
 
 			ImGui_ImplDX11_Init(hWnd, device, immediateContext);
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}
 		immediateContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
+		////// reading
 		auto& window = BeginScene();
+		////// reading
+		if (ShowMenu)
+		{
+			ImGuiStyle& style = ImGui::GetStyle();
+			ImVec4* colors = style.Colors;
 
-		auto success = FALSE;
+			/// 0 = FLAT APPEARENCE
+			/// 1 = MORE "3D" LOOK
+			int is3D = 0;
 
-		uint64_t BaseAddress = (uint64_t)GetModuleHandleA(NULL);
+			colors[ImGuiCol_Text] = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+			colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
+			colors[ImGuiCol_ChildBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+			colors[ImGuiCol_WindowBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+			colors[ImGuiCol_PopupBg] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+			colors[ImGuiCol_Border] = ImVec4(0.12f, 0.12f, 0.12f, 0.71f);
+			colors[ImGuiCol_BorderShadow] = ImVec4(1.00f, 1.00f, 1.00f, 0.06f);
+			colors[ImGuiCol_FrameBg] = ImVec4(0.42f, 0.42f, 0.42f, 0.54f);
+			colors[ImGuiCol_FrameBgHovered] = ImVec4(0.42f, 0.42f, 0.42f, 0.40f);
+			colors[ImGuiCol_FrameBgActive] = ImVec4(0.56f, 0.56f, 0.56f, 0.67f);
+			colors[ImGuiCol_TitleBg] = ImVec4(0.19f, 0.19f, 0.19f, 1.00f);
+			colors[ImGuiCol_TitleBgActive] = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
+			colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.17f, 0.17f, 0.17f, 0.90f);
+			colors[ImGuiCol_MenuBarBg] = ImVec4(0.335f, 0.335f, 0.335f, 1.000f);
+			colors[ImGuiCol_ScrollbarBg] = ImVec4(0.24f, 0.24f, 0.24f, 0.53f);
+			colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
+			colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.52f, 0.52f, 0.52f, 1.00f);
+			colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.76f, 0.76f, 0.76f, 1.00f);
+			colors[ImGuiCol_CheckMark] = ImVec4(0.65f, 0.65f, 0.65f, 1.00f);
+			colors[ImGuiCol_SliderGrab] = ImVec4(0.52f, 0.52f, 0.52f, 1.00f);
+			colors[ImGuiCol_SliderGrabActive] = ImVec4(0.64f, 0.64f, 0.64f, 1.00f);
+			colors[ImGuiCol_Button] = ImVec4(0.54f, 0.54f, 0.54f, 0.35f);
+			colors[ImGuiCol_ButtonHovered] = ImVec4(0.52f, 0.52f, 0.52f, 0.59f);
+			colors[ImGuiCol_ButtonActive] = ImVec4(0.76f, 0.76f, 0.76f, 1.00f);
+			colors[ImGuiCol_Header] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
+			colors[ImGuiCol_HeaderHovered] = ImVec4(0.47f, 0.47f, 0.47f, 1.00f);
+			colors[ImGuiCol_HeaderActive] = ImVec4(0.76f, 0.76f, 0.76f, 0.77f);
+			colors[ImGuiCol_Separator] = ImVec4(0.000f, 0.000f, 0.000f, 0.137f);
+			colors[ImGuiCol_SeparatorHovered] = ImVec4(0.700f, 0.671f, 0.600f, 0.290f);
+			colors[ImGuiCol_SeparatorActive] = ImVec4(0.702f, 0.671f, 0.600f, 0.674f);
+			colors[ImGuiCol_ResizeGrip] = ImVec4(0.26f, 0.59f, 0.98f, 0.25f);
+			colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.26f, 0.59f, 0.98f, 0.67f);
+			colors[ImGuiCol_ResizeGripActive] = ImVec4(0.26f, 0.59f, 0.98f, 0.95f);
+			colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
+			colors[ImGuiCol_PlotLinesHovered] = ImVec4(1.00f, 0.43f, 0.35f, 1.00f);
+			colors[ImGuiCol_PlotHistogram] = ImVec4(0.90f, 0.70f, 0.00f, 1.00f);
+			colors[ImGuiCol_PlotHistogramHovered] = ImVec4(1.00f, 0.60f, 0.00f, 1.00f);
+			colors[ImGuiCol_TextSelectedBg] = ImVec4(0.73f, 0.73f, 0.73f, 0.35f);
+			colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
+
+			style.PopupRounding = 3;
+
+			style.WindowPadding = ImVec2(4, 4);
+			style.FramePadding = ImVec2(6, 4);
+			style.ItemSpacing = ImVec2(6, 2);
+
+			style.ScrollbarSize = 18;
+
+			style.WindowBorderSize = 1;
+			style.ChildBorderSize = 1;
+			style.PopupBorderSize = 1;
+			style.FrameBorderSize = is3D;
+
+			style.WindowRounding = 3;
+			style.ChildRounding = 3;
+			style.FrameRounding = 3;
+			style.ScrollbarRounding = 2;
+			style.GrabRounding = 3;
+
+#ifdef IMGUI_HAS_DOCK
+			style.TabBorderSize = is3D;
+			style.TabRounding = 3;
+
+			colors[ImGuiCol_DockingEmptyBg] = ImVec4(0.38f, 0.38f, 0.38f, 1.00f);
+			colors[ImGuiCol_Tab] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+			colors[ImGuiCol_TabHovered] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
+			colors[ImGuiCol_TabActive] = ImVec4(0.33f, 0.33f, 0.33f, 1.00f);
+			colors[ImGuiCol_TabUnfocused] = ImVec4(0.25f, 0.25f, 0.25f, 1.00f);
+			colors[ImGuiCol_TabUnfocusedActive] = ImVec4(0.33f, 0.33f, 0.33f, 1.00f);
+			colors[ImGuiCol_DockingPreview] = ImVec4(0.85f, 0.85f, 0.85f, 0.28f);
+
+			if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+			{
+				style.WindowRounding = 0.0f;
+				style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+			}
+#endif
+
+			ImGui::SetNextWindowSize({ 500, 400 }, ImGuiCond_Always);
+			ImGui::SetNextWindowCollapsed(false, ImGuiCond_Always);
+			static int tabb = 0;
+			ImGui::Begin(("OpensrcFN"), reinterpret_cast<bool*>(true)); // start open
+			ImGui::SetWindowPos(ImVec2(0, 25), ImGuiCond_FirstUseEver);
+
+			ImGui::Checkbox(("Aimbot"), &Settings.Aimbot);
+			ImGui::Checkbox(("SilentAimbot"), &Settings.SilentAimbot);
+			if (!Settings.AutoAimbot) {
+				ImGui::Checkbox(("AimbotFOV##checkbox"), &Settings.ESP.AimbotFOV);
+			}
+			if (!Settings.AutoAimbot) {
+				ImGui::SliderFloat(("AimbotFOV##slider"), &Settings.AimbotFOV, 0.0f, 1000.0f, ("%.2f"));
+				ImGui::SliderFloat(("AimbotSlow"), &Settings.AimbotSlow, 0.0f, 25.0f, ("%.2f"));
+			}
+			ImGui::Text("Ban Rsik");
+			if (Settings.Aimbot) {
+				ImGui::Checkbox(("Rage"), &Settings.AutoAimbot);
+				ImGui::Checkbox(("NoSpreadAimbot"), &Settings.NoSpreadAimbot);
+				ImGui::Checkbox(("InstantReload"), &Settings.InstantReload);
+			}
+			ImGui::Text(("ESP:"));
+			ImGui::Checkbox(("bone/box"), &Settings.ESP.Players);
+
+			if (Settings.ESP.Players) {
+				ImGui::Checkbox(("PlayerLines"), &Settings.ESP.PlayerLines);
+				ImGui::Checkbox(("PlayerNames"), &Settings.ESP.PlayerNames);
+
+				ImGui::PushItemWidth(150.0f);
+				ImGui::ColorPicker3(("PlayerVisibleColor"), Settings.ESP.PlayerVisibleColor);
+				ImGui::ColorPicker3(("PlayerNotVisibleColor"), Settings.ESP.PlayerNotVisibleColor);
+				ImGui::PopItemWidth();
+			}
+			ImGui::SliderFloat(("FOV"), &Settings.FOV, 60.0f, 160.0f, ("%.2f"));
+			ImGui::Text("Loot ESP:");
+			ImGui::Checkbox(("Ammo"), &Settings.ESP.Ammo);
+			ImGui::Checkbox(("Containers"), &Settings.ESP.Containers);
+			ImGui::Checkbox(("Weapons"), &Settings.ESP.Weapons);
+			if (Settings.ESP.Weapons) {
+				ImGui::SliderInt(("MinWeaponTier Rariety"), &Settings.ESP.MinWeaponTier, 0, 8);
+			}
+			ImGui::End();
+		}
 
 		auto success = FALSE;
 		do {
@@ -722,8 +666,7 @@ namespace renderr
 				window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 26, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
 				window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 27, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.01f }), 105);
 				window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV + 28, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105);
-				window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, +29, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105); {
-				}
+				window.DrawList->AddCircle(ImVec2(width / 2, height / 2), Settings.AimbotFOV, +29, ImGui::GetColorU32({ 255.0,255.0,255.0, 0.005f }), 105);
 			}
 
 			/*printf("\nLocalPlayerController : %p.", Core::LocalPlayerController);
