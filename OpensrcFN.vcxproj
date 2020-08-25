@@ -197,7 +197,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="util.h" />
-    <ClInclude Include="xorstr.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="spoofinternal.asm">

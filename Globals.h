@@ -1,6 +1,6 @@
 #pragma once
-#include "imgui/imgui.h"
 #include <d3d11.h>
+#include "imgui.h"
 namespace Global
 {
 	bool dx_init = false;

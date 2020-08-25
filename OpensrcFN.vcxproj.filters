@@ -29,7 +29,6 @@
     <ClInclude Include="Structs.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="rendererer.h" />
-    <ClInclude Include="xorstr.h" />
     <ClInclude Include="hooks.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="imconfig.h">
