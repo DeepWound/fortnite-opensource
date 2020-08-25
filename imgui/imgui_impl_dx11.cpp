@@ -1,4 +1,3 @@
-
 // ImGui Win32 + DirectX11 binding
 // In this binding, ImTextureID is used to store a 'ID3D11ShaderResourceView*' texture identifier. Read the FAQ about ImTextureID in imgui.cpp.
 
@@ -21,18 +20,18 @@ static INT64                    g_Time = 0;
 static INT64                    g_TicksPerSecond = 0;
 
 static HWND                     g_hWnd = 0;
-static ID3D11Device*            g_pd3dDevice = NULL;
-static ID3D11DeviceContext*     g_pd3dDeviceContext = NULL;
-static ID3D11Buffer*            g_pVB = NULL;
-static ID3D11Buffer*            g_pIB = NULL;
-static ID3D11VertexShader*      g_pVertexShader = NULL;
-static ID3D11InputLayout*       g_pInputLayout = NULL;
-static ID3D11Buffer*            g_pVertexConstantBuffer = NULL;
-static ID3D11PixelShader*       g_pPixelShader = NULL;
-static ID3D11SamplerState*      g_pFontSampler = NULL;
-static ID3D11ShaderResourceView*g_pFontTextureView = NULL;
-static ID3D11RasterizerState*   g_pRasterizerState = NULL;
-static ID3D11BlendState*        g_pBlendState = NULL;
+static ID3D11Device* g_pd3dDevice = NULL;
+static ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
+static ID3D11Buffer* g_pVB = NULL;
+static ID3D11Buffer* g_pIB = NULL;
+static ID3D11VertexShader* g_pVertexShader = NULL;
+static ID3D11InputLayout* g_pInputLayout = NULL;
+static ID3D11Buffer* g_pVertexConstantBuffer = NULL;
+static ID3D11PixelShader* g_pPixelShader = NULL;
+static ID3D11SamplerState* g_pFontSampler = NULL;
+static ID3D11ShaderResourceView* g_pFontTextureView = NULL;
+static ID3D11RasterizerState* g_pRasterizerState = NULL;
+static ID3D11BlendState* g_pBlendState = NULL;
 static ID3D11DepthStencilState* g_pDepthStencilState = NULL;
 static int                      g_VertexBufferSize = 5000, g_IndexBufferSize = 10000;
 
@@ -123,23 +122,23 @@ void ImGui_ImplDX11_RenderDrawLists(ImDrawData* draw_data)
 		UINT                        ScissorRectsCount, ViewportsCount;
 		D3D11_RECT                  ScissorRects[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
 		D3D11_VIEWPORT              Viewports[D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE];
-		ID3D11RasterizerState*      RS;
-		ID3D11BlendState*           BlendState;
+		ID3D11RasterizerState* RS;
+		ID3D11BlendState* BlendState;
 		FLOAT                       BlendFactor[4];
 		UINT                        SampleMask;
 		UINT                        StencilRef;
-		ID3D11DepthStencilState*    DepthStencilState;
-		ID3D11ShaderResourceView*   PSShaderResource;
-		ID3D11SamplerState*         PSSampler;
-		ID3D11PixelShader*          PS;
-		ID3D11VertexShader*         VS;
+		ID3D11DepthStencilState* DepthStencilState;
+		ID3D11ShaderResourceView* PSShaderResource;
+		ID3D11SamplerState* PSSampler;
+		ID3D11PixelShader* PS;
+		ID3D11VertexShader* VS;
 		UINT                        PSInstancesCount, VSInstancesCount;
-		ID3D11ClassInstance*        PSInstances[256], *VSInstances[256];   // 256 is max according to PSSetShader documentation
+		ID3D11ClassInstance* PSInstances[256], * VSInstances[256];   // 256 is max according to PSSetShader documentation
 		D3D11_PRIMITIVE_TOPOLOGY    PrimitiveTopology;
-		ID3D11Buffer*               IndexBuffer, *VertexBuffer, *VSConstantBuffer;
+		ID3D11Buffer* IndexBuffer, * VertexBuffer, * VSConstantBuffer;
 		UINT                        IndexBufferOffset, VertexBufferStride, VertexBufferOffset;
 		DXGI_FORMAT                 IndexBufferFormat;
-		ID3D11InputLayout*          InputLayout;
+		ID3D11InputLayout* InputLayout;
 	};
 	BACKUP_DX11_STATE old;
 	old.ScissorRectsCount = old.ViewportsCount = D3D11_VIEWPORT_AND_SCISSORRECT_OBJECT_COUNT_PER_PIPELINE;
@@ -240,7 +239,7 @@ static bool IsAnyMouseButtonDown()
 	return false;
 }
 
-// Process Win32 mouse/keyboard inputs. 
+// Process Win32 mouse/keyboard inputs.
 // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
 // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application.
 // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application.
@@ -326,7 +325,7 @@ static void ImGui_ImplDX11_CreateFontsTexture()
 		desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		desc.CPUAccessFlags = 0;
 
-		ID3D11Texture2D *pTexture = NULL;
+		ID3D11Texture2D* pTexture = NULL;
 		D3D11_SUBRESOURCE_DATA subResource;
 		subResource.pSysMem = pixels;
 		subResource.SysMemPitch = desc.Width * 4;
@@ -345,7 +344,7 @@ static void ImGui_ImplDX11_CreateFontsTexture()
 	}
 
 	// Store our identifier
-	io.Fonts->TexID = (void *)g_pFontTextureView;
+	io.Fonts->TexID = (void*)g_pFontTextureView;
 
 	// Create texture sampler
 	{
@@ -371,9 +370,9 @@ bool ImGui_ImplDX11_CreateDeviceObjects()
 		ImGui_ImplDX11_InvalidateDeviceObjects();
 
 	// By using D3DCompile() from <d3dcompiler.h> / d3dcompiler.lib, we introduce a dependency to a given version of d3dcompiler_XX.dll (see D3DCOMPILER_DLL_A)
-	// If you would like to use this DX11 sample code but remove this dependency you can: 
+	// If you would like to use this DX11 sample code but remove this dependency you can:
 	//  1) compile once, save the compiled shader blobs into a file or source code and pass them to CreateVertexShader()/CreatePixelShader() [preferred solution]
-	//  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL. 
+	//  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
 	// See https://github.com/ocornut/imgui/pull/638 for sources and details.
 
 	// Create the vertex shader
@@ -483,9 +482,9 @@ bool    ImGui_ImplDX11_Init(void* hwnd, ID3D11Device* device, ID3D11DeviceContex
 	g_pd3dDevice = device;
 	g_pd3dDeviceContext = device_context;
 
-	if (!QueryPerformanceFrequency((LARGE_INTEGER *)&g_TicksPerSecond))
+	if (!QueryPerformanceFrequency((LARGE_INTEGER*)&g_TicksPerSecond))
 		return false;
-	if (!QueryPerformanceCounter((LARGE_INTEGER *)&g_Time))
+	if (!QueryPerformanceCounter((LARGE_INTEGER*)&g_Time))
 		return false;
 
 	ImGuiIO& io = ImGui::GetIO();
@@ -539,7 +538,7 @@ void ImGui_ImplDX11_NewFrame()
 
 	// Setup time step
 	INT64 current_time;
-	QueryPerformanceCounter((LARGE_INTEGER *)&current_time);
+	QueryPerformanceCounter((LARGE_INTEGER*)&current_time);
 	io.DeltaTime = (float)(current_time - g_Time) / g_TicksPerSecond;
 	g_Time = current_time;
 

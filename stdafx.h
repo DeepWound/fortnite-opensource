@@ -20,6 +20,7 @@
 #include <d3d11.h>
 #pragma comment(lib, "d3d11.lib")
 
+#include "imgui_xorstr.h"
 #include "xor.hpp"
 #include "Structs.h"
 #include "util.h"
@@ -28,9 +29,8 @@
 #include "core.h"
 #include "settings.h"
 
-
-ImGuiWindow &BeginScene();
-VOID EndScene(ImGuiWindow &window);
+ImGuiWindow& BeginScene();
+VOID EndScene(ImGuiWindow& window);
 
 template<typename T>
 T ReadMemory(DWORD_PTR address, const T& def = T())
@@ -117,7 +117,6 @@ public:
 	RGBA glassyellow = { 255,255,0,160 };
 	RGBA glass = { 200,200,200,60 };
 	RGBA Plum = { 221,160,221,160 };
-
 };
 
 class Vector3
@@ -125,16 +124,13 @@ class Vector3
 public:
 	Vector3() : x(0.f), y(0.f), z(0.f)
 	{
-
 	}
 
 	Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z)
 	{
-
 	}
 	~Vector3()
 	{
-
 	}
 
 	float x;

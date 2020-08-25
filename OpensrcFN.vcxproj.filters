@@ -26,6 +26,8 @@
     <ClInclude Include="imgui\stb_truetype.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structs.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="imgui_xorstr.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="spoofinternal.asm" />

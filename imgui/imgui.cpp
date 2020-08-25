@@ -37,7 +37,6 @@ Index
 - ISSUES & TODO-LIST
 - CODE
 
-
 MISSION STATEMENT
 =================
 
@@ -54,7 +53,6 @@ for the first time, etc. but a typical frame won't allocate anything)
 Designed for developers and content-creators, not the typical end-user! Some of the weaknesses includes:
 - Doesn't look fancy, doesn't animate
 - Limited layout features, intricate layouts are typically crafted in code
-
 
 END-USER GUIDE
 ==============
@@ -76,7 +74,6 @@ END-USER GUIDE
 - ESCAPE to revert text to its original value.
 - You can apply arithmetic operators +,*,/ on numerical values. Use +- to subtract (because - would set a negative value!)
 - Controls are automatically adjusted for OSX to match standard OSX text editing operations.
-
 
 PROGRAMMER GUIDE
 ================
@@ -203,8 +200,6 @@ idx_buffer += pcmd->ElemCount;
 - When calling NewFrame(), the 'io.WantCaptureMouse'/'io.WantCaptureKeyboard'/'io.WantTextInput' flags are updated.
 They tell you if ImGui intends to use your inputs. So for example, if 'io.WantCaptureMouse' is set you would typically want to hide
 mouse inputs from the rest of your application. Read the FAQ below for more information about those flags.
-
-
 
 API BREAKING CHANGES
 ====================
@@ -364,11 +359,9 @@ it is now recommended that you sample the font texture with bilinear interpolati
 - 2014/08/30 (1.09) - moved IMGUI_FONT_TEX_UV_FOR_WHITE preprocessor define to IO.FontTexUvForWhite
 - 2014/08/28 (1.09) - changed the behavior of IO.PixelCenterOffset following various rendering fixes
 
-
 ISSUES & TODO-LIST
 ==================
 See TODO.txt
-
 
 FREQUENTLY ASKED QUESTIONS (FAQ), TIPS
 ======================================
@@ -585,6 +578,7 @@ of a deep nested inner loop in your code.
 
 */
 
+#include "../imgui_xorstr.h"
 #include "imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
@@ -605,7 +599,6 @@ of a deep nested inner loop in your code.
 #pragma warning (disable: 4996) // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #endif
 
-// Clang warnings with -Weverything
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wunknown-pragmas"        // warning : unknown warning group '-Wformat-pedantic *'        // not all warnings are known by all clang versions.. so ignoring warnings triggers new warnings on some configuration. great!
 #pragma clang diagnostic ignored "-Wold-style-cast"         // warning : use of old-style cast                              // yes, they are more terse.
@@ -614,7 +607,7 @@ of a deep nested inner loop in your code.
 #pragma clang diagnostic ignored "-Wexit-time-destructors"  // warning : declaration requires an exit-time destructor       // exit-time destruction order is undefined. if MemFree() leads to users code that has been disabled before exit it might cause problems. ImGui coding style welcomes static/globals.
 #pragma clang diagnostic ignored "-Wglobal-constructors"    // warning : declaration requires a global destructor           // similar to above, not sure what the exact difference it.
 #pragma clang diagnostic ignored "-Wsign-conversion"        // warning : implicit conversion changes signedness             //
-#pragma clang diagnostic ignored "-Wformat-pedantic"        // warning : format specifies type 'void *' but the argument has type 'xxxx *' // unreasonable, would lead to casting every %p arg to void*. probably enabled by -pedantic. 
+#pragma clang diagnostic ignored "-Wformat-pedantic"        // warning : format specifies type 'void *' but the argument has type 'xxxx *' // unreasonable, would lead to casting every %p arg to void*. probably enabled by -pedantic.
 #pragma clang diagnostic ignored "-Wint-to-void-pointer-cast" // warning : cast to 'void *' from smaller integer type 'int' //
 #elif defined(__GNUC__)
 #pragma GCC diagnostic ignored "-Wunused-function"          // warning: 'xxxx' defined but not used
@@ -845,7 +838,7 @@ void ImGuiIO::AddInputCharactersUTF8(const char* utf8_chars)
 // HELPERS
 //-----------------------------------------------------------------------------
 
-#define IM_F32_TO_INT8_UNBOUND(_VAL)    ((int)((_VAL) * 255.0f + ((_VAL)>=0 ? 0.5f : -0.5f)))   // Unsaturated, for display purpose 
+#define IM_F32_TO_INT8_UNBOUND(_VAL)    ((int)((_VAL) * 255.0f + ((_VAL)>=0 ? 0.5f : -0.5f)))   // Unsaturated, for display purpose
 #define IM_F32_TO_INT8_SAT(_VAL)        ((int)(ImSaturate(_VAL) * 255.0f + 0.5f))               // Saturated, always output 0..255
 
 // Play it nice with Windows users. Notepad in 2015 still doesn't display text data with Unix-style \n.
@@ -949,7 +942,7 @@ int ImStrlenW(const ImWchar* str)
 
 const ImWchar* ImStrbolW(const ImWchar* buf_mid_line, const ImWchar* buf_begin) // find beginning-of-line
 {
-	while (buf_mid_line > buf_begin&& buf_mid_line[-1] != '\n')
+	while (buf_mid_line > buf_begin && buf_mid_line[-1] != '\n')
 		buf_mid_line--;
 	return buf_mid_line;
 }
@@ -988,7 +981,7 @@ static const char* ImAtoi(const char* src, int* output)
 	return src;
 }
 
-// A) MSVC version appears to return -1 on overflow, whereas glibc appears to return total count (which may be >= buf_size). 
+// A) MSVC version appears to return -1 on overflow, whereas glibc appears to return total count (which may be >= buf_size).
 // Ideally we would test for only one of those limits at runtime depending on the behavior the vsnprintf(), but trying to deduct it at compile time sounds like a pandora can of worm.
 // B) When buf==NULL vsnprintf() will return the output size.
 #ifndef IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS
@@ -1242,10 +1235,10 @@ ImVec4 ImGui::ColorConvertU32ToFloat4(ImU32 in)
 {
 	float s = 1.0f / 255.0f;
 	return ImVec4(
-		((in >> IM_COL32_R_SHIFT) & 0xFF)* s,
-		((in >> IM_COL32_G_SHIFT) & 0xFF)* s,
-		((in >> IM_COL32_B_SHIFT) & 0xFF)* s,
-		((in >> IM_COL32_A_SHIFT) & 0xFF)* s);
+		((in >> IM_COL32_R_SHIFT) & 0xFF) * s,
+		((in >> IM_COL32_G_SHIFT) & 0xFF) * s,
+		((in >> IM_COL32_B_SHIFT) & 0xFF) * s,
+		((in >> IM_COL32_A_SHIFT) & 0xFF) * s);
 }
 
 ImU32 ImGui::ColorConvertFloat4ToU32(const ImVec4& in)
@@ -1739,7 +1732,7 @@ float ImGuiMenuColumns::CalcExtraSpace(float avail_w)
 
 static void SetCursorPosYAndSetupDummyPrevLine(float pos_y, float line_height)
 {
-	// Set cursor position and a few other things so that SetScrollHere() and Columns() can work when seeking cursor. 
+	// Set cursor position and a few other things so that SetScrollHere() and Columns() can work when seeking cursor.
 	// FIXME: It is problematic that we have to do that here, because custom/equivalent end-user code would stumble on the same issue. Consider moving within SetCursorXXX functions?
 	ImGui::SetCursorPosY(pos_y);
 	ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -2059,7 +2052,7 @@ bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
 		if (g.ActiveId != 0 && g.ActiveId != window->DC.LastItemId && !g.ActiveIdAllowOverlap && g.ActiveId != window->MoveId)
 			return false;
 
-	// Test if interactions on this window are blocked by an active popup or modal 
+	// Test if interactions on this window are blocked by an active popup or modal
 	if (!IsWindowContentHoverable(window, flags))
 		return false;
 
@@ -2732,7 +2725,7 @@ static void LoadIniSettingsFromMemory(const char* buf_readonly)
 			line_end++;
 		line_end[0] = 0;
 
-		if (line[0] == '[' && line_end > line&& line_end[-1] == ']')
+		if (line[0] == '[' && line_end > line && line_end[-1] == ']')
 		{
 			// Parse "[Type][Name]". Note that 'Name' can itself contains [] characters, which is acceptable with the current format and parsing code.
 			line_end[-1] = 0;
@@ -2747,7 +2740,7 @@ static void LoadIniSettingsFromMemory(const char* buf_readonly)
 			}
 			else
 			{
-				*type_end = 0; // Overwrite first ']' 
+				*type_end = 0; // Overwrite first ']'
 				name_start++;  // Skip second '['
 			}
 			entry_handler = ImGui::FindSettingsHandler(type_start);
@@ -2861,7 +2854,7 @@ static void AddDrawListToDrawData(ImVector<ImDrawList*>* out_render_list, ImDraw
 	// Check that draw_list doesn't use more vertices than indexable (default ImDrawIdx = unsigned short = 2 bytes = 64K vertices per ImDrawList = per window)
 	// If this assert triggers because you are drawing lots of stuff manually:
 	// A) Make sure you are coarse clipping, because ImDrawList let all your vertices pass. You can use the Metrics window to inspect draw list contents.
-	// B) If you need/want meshes with more than 64K vertices, uncomment the '#define ImDrawIdx unsigned int' line in imconfig.h to set the index size to 4 bytes. 
+	// B) If you need/want meshes with more than 64K vertices, uncomment the '#define ImDrawIdx unsigned int' line in imconfig.h to set the index size to 4 bytes.
 	//    You'll need to handle the 4-bytes indices to your renderer. For example, the OpenGL example code detect index size at compile-time by doing:
 	//      glDrawElements(GL_TRIANGLES, (GLsizei)pcmd->ElemCount, sizeof(ImDrawIdx) == 2 ? GL_UNSIGNED_SHORT : GL_UNSIGNED_INT, idx_buffer_offset);
 	//    Your own engine or render API may use different parameters or function calls to specify index sizes. 2 and 4 bytes indices are generally supported by most API.
@@ -3756,7 +3749,7 @@ void ImGui::OpenPopupEx(ImGuiID id)
 
 		// Gently handle the user mistakenly calling OpenPopup() every frame. It is a programming mistake! However, if we were to run the regular code path, the ui
 		// would become completely unusable because the popup will always be in hidden-while-calculating-size state _while_ claiming focus. Which would be a very confusing
-		// situation for the programmer. Instead, we silently allow the popup to proceed, it will keep reappearing and the programming error will be more obvious to understand. 
+		// situation for the programmer. Instead, we silently allow the popup to proceed, it will keep reappearing and the programming error will be more obvious to understand.
 		if (g.OpenPopupStack[current_stack_size].PopupId == id && g.OpenPopupStack[current_stack_size].OpenFrameCount == g.FrameCount - 1)
 			g.OpenPopupStack[current_stack_size].OpenFrameCount = popup_ref.OpenFrameCount;
 		else
@@ -3883,13 +3876,13 @@ bool ImGui::BeginPopup(const char* str_id, ImGuiWindowFlags flags)
 bool ImGui::IsPopupOpen(ImGuiID id)
 {
 	ImGuiContext& g = *GImGui;
-	return g.OpenPopupStack.Size > g.CurrentPopupStack.Size&& g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == id;
+	return g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == id;
 }
 
 bool ImGui::IsPopupOpen(const char* str_id)
 {
 	ImGuiContext& g = *GImGui;
-	return g.OpenPopupStack.Size > g.CurrentPopupStack.Size&& g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == g.CurrentWindow->GetID(str_id);
+	return g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].PopupId == g.CurrentWindow->GetID(str_id);
 }
 
 bool ImGui::BeginPopupModal(const char* name, bool* p_open, ImGuiWindowFlags flags)
@@ -4651,7 +4644,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 
 		// SCROLLBAR STATUS
 
-		// Update scrollbar status (based on the Size that was effective during last frame or the auto-resized Size). 
+		// Update scrollbar status (based on the Size that was effective during last frame or the auto-resized Size).
 		if (!window->Collapsed)
 		{
 			// When reading the current size we need to read it after size constraints have been applied
@@ -4842,7 +4835,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 				window->DrawList->AddLine(title_bar_rect.GetBL() + ImVec2(style.WindowBorderSize, -1), title_bar_rect.GetBR() + ImVec2(-style.WindowBorderSize, -1), GetColorU32(ImGuiCol_Border), style.FrameBorderSize);
 		}
 
-		// Store a backup of SizeFull which we will use next frame to decide if we need scrollbars. 
+		// Store a backup of SizeFull which we will use next frame to decide if we need scrollbars.
 		window->SizeFullAtLastBegin = window->SizeFull;
 
 		// Update ContentsRegionMax. All the variable it depends on are set above in this function.
@@ -4908,7 +4901,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 			{
 				const float PAD = 2.0f;
 				const float rad = (window->TitleBarHeight() - PAD * 2.0f) * 0.5f;
-				if (CloseButton(window->GetID("#CLOSE"), window->Rect().GetTR() + ImVec2(-PAD - rad, PAD + rad), rad))
+				if (CloseButton(window->GetID(xorstr("#CLOSE")), window->Rect().GetTR() + ImVec2(-PAD - rad, PAD + rad), rad))
 					*p_open = false;
 			}
 
@@ -5001,7 +4994,7 @@ bool ImGui::Begin(const char* name, bool* p_open, const ImVec2& size_on_first_us
 	if (size_on_first_use.x != 0.0f || size_on_first_use.y != 0.0f)
 		SetNextWindowSize(size_on_first_use, ImGuiCond_FirstUseEver);
 
-	// Old API feature: we could override the window background alpha with a parameter. This is actually tricky to reproduce manually because: 
+	// Old API feature: we could override the window background alpha with a parameter. This is actually tricky to reproduce manually because:
 	// (1) there are multiple variants of WindowBg (popup, tooltip, etc.) and (2) you can't call PushStyleColor before Begin and PopStyleColor just after Begin() because of how CheckStackSizes() behave.
 	// The user-side solution is to do backup = GetStyleColorVec4(ImGuiCol_xxxBG), PushStyleColor(ImGuiCol_xxxBg), Begin, PushStyleColor(ImGuiCol_xxxBg, backup), [...], PopStyleColor(), End(); PopStyleColor() - which is super awkward.
 	// The alpha override was rarely used but for now we'll leave the Begin() variant around for a bit. We may either lift the constraint on CheckStackSizes() either add a SetNextWindowBgAlpha() helper that does it magically.
@@ -6313,7 +6306,7 @@ bool ImGui::ButtonBehavior(const ImRect& bb, ImGuiID id, bool* out_hovered, bool
 				ClearActiveID();
 			}
 
-			// 'Repeat' mode acts when held regardless of _PressedOn flags (see table above). 
+			// 'Repeat' mode acts when held regardless of _PressedOn flags (see table above).
 			// Relies on repeat logic of IsMouseClicked() but we may as well do it ourselves if we end up exposing finer RepeatDelay/RepeatRate settings.
 			if ((flags & ImGuiButtonFlags_Repeat) && g.ActiveId == id && g.IO.MouseDownDuration[0] > 0.0f && IsMouseClicked(0, true))
 				pressed = true;
@@ -8243,7 +8236,6 @@ static ImVec2 InputTextCalcTextSizeW(const ImWchar* text_begin, const ImWchar* t
 // Wrapper for stb_textedit.h to edit text (our wrapper is for: statically sized buffer, single-line, wchar characters. InputText converts between UTF-8 and wchar)
 namespace ImGuiStb
 {
-
 	static int     STB_TEXTEDIT_STRINGLEN(const STB_TEXTEDIT_STRING* obj) { return obj->CurLenW; }
 	static ImWchar STB_TEXTEDIT_GETCHAR(const STB_TEXTEDIT_STRING* obj, int idx) { return obj->Text[idx]; }
 	static float   STB_TEXTEDIT_GETWIDTH(STB_TEXTEDIT_STRING* obj, int line_start_idx, int char_idx) { ImWchar c = obj->Text[line_start_idx + char_idx]; if (c == '\n') return STB_TEXTEDIT_GETWIDTH_NEWLINE; return GImGui->Font->GetCharAdvance(c) * (GImGui->FontSize / GImGui->Font->FontSize); }
@@ -8331,7 +8323,6 @@ namespace ImGuiStb
 
 #define STB_TEXTEDIT_IMPLEMENTATION
 #include "stb_textedit.h"
-
 }
 
 void ImGuiTextEditState::OnKeyPressed(int key)
@@ -9716,7 +9707,7 @@ bool ImGui::BeginMenu(const char* label, bool enabled)
 
 	bool pressed;
 	bool menu_is_open = IsPopupOpen(id);
-	bool menuset_is_open = !(window->Flags & ImGuiWindowFlags_Popup) && (g.OpenPopupStack.Size > g.CurrentPopupStack.Size&& g.OpenPopupStack[g.CurrentPopupStack.Size].OpenParentId == window->IDStack.back());
+	bool menuset_is_open = !(window->Flags & ImGuiWindowFlags_Popup) && (g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].OpenParentId == window->IDStack.back());
 	ImGuiWindow* backed_nav_window = g.NavWindow;
 	if (menuset_is_open)
 		g.NavWindow = window;  // Odd hack to allow hovering across menus of a same menu-set (otherwise we wouldn't be able to hover parent)
@@ -9757,7 +9748,7 @@ bool ImGui::BeginMenu(const char* label, bool enabled)
 	{
 		// Implement http://bjk5.com/post/44698559168/breaking-down-amazons-mega-dropdown to avoid using timers, so menus feels more reactive.
 		bool moving_within_opened_triangle = false;
-		if (g.HoveredWindow == window && g.OpenPopupStack.Size > g.CurrentPopupStack.Size&& g.OpenPopupStack[g.CurrentPopupStack.Size].ParentWindow == window)
+		if (g.HoveredWindow == window && g.OpenPopupStack.Size > g.CurrentPopupStack.Size && g.OpenPopupStack[g.CurrentPopupStack.Size].ParentWindow == window)
 		{
 			if (ImGuiWindow* next_window = g.OpenPopupStack[g.CurrentPopupStack.Size].Window)
 			{
@@ -10072,7 +10063,7 @@ static void ColorPickerOptionsPopup(ImGuiColorEditFlags flags, const float* ref_
 	ImGui::EndPopup();
 }
 
-// Edit colors components (each component in 0.0f..1.0f range). 
+// Edit colors components (each component in 0.0f..1.0f range).
 // See enum ImGuiColorEditFlags_ for available options. e.g. Only access 3 floats if ImGuiColorEditFlags_NoAlpha flag is set.
 // With typical options: Left-click on colored square to open color picker. Right-click to open option menu. CTRL-Click over input fields to edit them and TAB to go to next item.
 bool ImGui::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flags)
@@ -10306,7 +10297,7 @@ static void RenderArrowsForVerticalBar(ImDrawList* draw_list, ImVec2 pos, ImVec2
 
 // ColorPicker
 // Note: only access 3 floats if ImGuiColorEditFlags_NoAlpha flag is set.
-// FIXME: we adjust the big color square height based on item width, which may cause a flickering feedback loop (if automatic height makes a vertical scrollbar appears, affecting automatic width..) 
+// FIXME: we adjust the big color square height based on item width, which may cause a flickering feedback loop (if automatic height makes a vertical scrollbar appears, affecting automatic width..)
 bool ImGui::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags flags, const float* ref_col)
 {
 	ImGuiContext& g = *GImGui;
@@ -11274,7 +11265,7 @@ void ImGui::ClearDragDrop()
 	g.DragDropAcceptFrameCount = -1;
 }
 
-// Call when current ID is active. 
+// Call when current ID is active.
 // When this returns true you need to: a) call SetDragDropPayload() exactly once, b) you may render the payload visual/description, c) call EndDragDropSource()
 bool ImGui::BeginDragDropSource(ImGuiDragDropFlags flags, int mouse_button)
 {
@@ -11303,8 +11294,8 @@ bool ImGui::BeginDragDropSource(ImGuiDragDropFlags flags, int mouse_button)
 			}
 
 			// Magic fallback (=somehow reprehensible) to handle items with no assigned ID, e.g. Text(), Image()
-			// We build a throwaway ID based on current ID stack + relative AABB of items in window. 
-			// THE IDENTIFIER WON'T SURVIVE ANY REPOSITIONING OF THE WIDGET, so if your widget moves your dragging operation will be canceled. 
+			// We build a throwaway ID based on current ID stack + relative AABB of items in window.
+			// THE IDENTIFIER WON'T SURVIVE ANY REPOSITIONING OF THE WIDGET, so if your widget moves your dragging operation will be canceled.
 			// We don't need to maintain/call ClearActiveID() as releasing the button will early out this function and trigger !ActiveIdIsAlive.
 			bool is_hovered = window->DC.LastItemRectHoveredRect;
 			if (!is_hovered && (g.ActiveId == 0 || g.ActiveIdWindow != window))
@@ -11482,7 +11473,7 @@ const ImGuiPayload* ImGui::AcceptDragDropPayload(const char* type, ImGuiDragDrop
 	ImGuiWindow* window = g.CurrentWindow;
 	ImGuiPayload& payload = g.DragDropPayload;
 	IM_ASSERT(g.DragDropActive);                        // Not called between BeginDragDropTarget() and EndDragDropTarget() ?
-	IM_ASSERT(payload.DataFrameCount != -1);            // Forgot to call EndDragDropTarget() ? 
+	IM_ASSERT(payload.DataFrameCount != -1);            // Forgot to call EndDragDropTarget() ?
 	if (type != NULL && !payload.IsDataType(type))
 		return NULL;
 

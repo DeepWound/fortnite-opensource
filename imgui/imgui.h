@@ -96,7 +96,7 @@ typedef void(*ImGuiSizeCallback)(ImGuiSizeCallbackData* data);
 typedef unsigned __int64 ImU64;     // 64-bit unsigned integer
 #else
 typedef unsigned long long ImU64;   // 64-bit unsigned integer
-#endif 
+#endif
 
 									// Others helpers at bottom of the file:
 									// class ImVector<>                 // Lightweight std::vector like class.
@@ -171,7 +171,7 @@ namespace ImGui
 	IMGUI_API void          SetNextWindowCollapsed(bool collapsed, ImGuiCond cond = 0);         // set next window collapsed state. call before Begin()
 	IMGUI_API void          SetNextWindowFocus();                                               // set next window to be focused / front-most. call before Begin()
 	IMGUI_API void          SetWindowPos(const ImVec2& pos, ImGuiCond cond = 0);                // (not recommended) set current window position - call within Begin()/End(). prefer using SetNextWindowPos(), as this may incur tearing and side-effects.
-	IMGUI_API void          SetWindowSize(const ImVec2& size, ImGuiCond cond = 0);              // (not recommended) set current window size - call within Begin()/End(). set to ImVec2(0,0) to force an auto-fit. prefer using SetNextWindowSize(), as this may incur tearing and minor side-effects.    
+	IMGUI_API void          SetWindowSize(const ImVec2& size, ImGuiCond cond = 0);              // (not recommended) set current window size - call within Begin()/End(). set to ImVec2(0,0) to force an auto-fit. prefer using SetNextWindowSize(), as this may incur tearing and minor side-effects.
 	IMGUI_API void          SetWindowCollapsed(bool collapsed, ImGuiCond cond = 0);             // (not recommended) set current window collapsed state. prefer using SetNextWindowCollapsed().
 	IMGUI_API void          SetWindowFocus();                                                   // (not recommended) set current window to be focused / front-most. prefer using SetNextWindowFocus().
 	IMGUI_API void          SetWindowPos(const char* name, const ImVec2& pos, ImGuiCond cond = 0);      // set named window position.
@@ -299,7 +299,7 @@ namespace ImGui
 	IMGUI_API void          ProgressBar(float fraction, const ImVec2& size_arg = ImVec2(-1, 0), const char* overlay = NULL);
 
 	// Widgets: Combo Box
-	// The new BeginCombo()/EndCombo() api allows you to manage your contents and selection state however you want it. 
+	// The new BeginCombo()/EndCombo() api allows you to manage your contents and selection state however you want it.
 	// The old Combo() api are helpers over BeginCombo()/EndCombo() which are kept available for convenience purpose.
 	IMGUI_API bool          BeginCombo(const char* label, const char* preview_value, ImGuiComboFlags flags = 0);
 	IMGUI_API void          EndCombo(); // only call EndCombo() if BeginCombo() returns true!
@@ -515,7 +515,6 @@ namespace ImGui
 	IMGUI_API void          DestroyContext(ImGuiContext* ctx);
 	IMGUI_API ImGuiContext* GetCurrentContext();
 	IMGUI_API void          SetCurrentContext(ImGuiContext* ctx);
-
 } // namespace ImGui
 
   // Flags for ImGui::Begin()
@@ -583,7 +582,7 @@ enum ImGuiTreeNodeFlags_
 	ImGuiTreeNodeFlags_DefaultOpen = 1 << 5,   // Default node to be open
 	ImGuiTreeNodeFlags_OpenOnDoubleClick = 1 << 6,   // Need double-click to open node
 	ImGuiTreeNodeFlags_OpenOnArrow = 1 << 7,   // Only open when clicking on the arrow part. If ImGuiTreeNodeFlags_OpenOnDoubleClick is also set, single-click arrow or double-click all box to open.
-	ImGuiTreeNodeFlags_Leaf = 1 << 8,   // No collapsing, no arrow (use as a convenience for leaf nodes). 
+	ImGuiTreeNodeFlags_Leaf = 1 << 8,   // No collapsing, no arrow (use as a convenience for leaf nodes).
 	ImGuiTreeNodeFlags_Bullet = 1 << 9,   // Display a bullet instead of arrow
 	ImGuiTreeNodeFlags_FramePadding = 1 << 10,  // Use FramePadding (even for an unframed text node) to vertically align text baseline to regular widget height. Equivalent to calling AlignTextToFramePadding().
 												//ImGuITreeNodeFlags_SpanAllAvailWidth  = 1 << 11,  // FIXME: TODO: Extend hit box horizontally even if not framed
@@ -655,7 +654,7 @@ enum ImGuiDragDropFlags_
 };
 
 // Standard Drag and Drop payload types. You can define you own payload types using 12-characters long strings. Types starting with '_' are defined by Dear ImGui.
-#define IMGUI_PAYLOAD_TYPE_COLOR_3F     "_COL3F"    // float[3]     // Standard type for colors, without alpha. User code may use this type. 
+#define IMGUI_PAYLOAD_TYPE_COLOR_3F     "_COL3F"    // float[3]     // Standard type for colors, without alpha. User code may use this type.
 #define IMGUI_PAYLOAD_TYPE_COLOR_4F     "_COL4F"    // float[4]     // Standard type for colors. User code may use this type.
 
 // User fill ImGuiIO.KeyMap[] array with indices into the ImGuiIO.KeysDown[512] array
@@ -789,7 +788,7 @@ enum ImGuiColorEditFlags_
 												  ImGuiColorEditFlags_RGB = 1 << 13,  // [Inputs]     // ColorEdit: choose one among RGB/HSV/HEX. ColorPicker: choose any combination using RGB/HSV/HEX.
 												  ImGuiColorEditFlags_HSV = 1 << 14,  // [Inputs]     // "
 												  ImGuiColorEditFlags_HEX = 1 << 15,  // [Inputs]     // "
-												  ImGuiColorEditFlags_Uint8 = 1 << 16,  // [DataType]   // ColorEdit, ColorPicker, ColorButton: _display_ values formatted as 0..255. 
+												  ImGuiColorEditFlags_Uint8 = 1 << 16,  // [DataType]   // ColorEdit, ColorPicker, ColorButton: _display_ values formatted as 0..255.
 												  ImGuiColorEditFlags_Float = 1 << 17,  // [DataType]   // ColorEdit, ColorPicker, ColorButton: _display_ values formatted as 0.0f..1.0f floats instead of 0..255 integers. No round-trip of value via integers.
 												  ImGuiColorEditFlags_PickerHueBar = 1 << 18,  // [PickerMode] // ColorPicker: bar for Hue, rectangle for Sat/Value.
 												  ImGuiColorEditFlags_PickerHueWheel = 1 << 19,  // [PickerMode] // ColorPicker: wheel for Hue, triangle for Sat/Value.
@@ -947,7 +946,7 @@ struct ImGuiIO
 																		// Output - Retrieve after calling NewFrame()
 																		//------------------------------------------------------------------
 
-	bool        WantCaptureMouse;           // When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application. This is set by ImGui when it wants to use your mouse (e.g. unclicked mouse is hovering a window, or a widget is active). 
+	bool        WantCaptureMouse;           // When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application. This is set by ImGui when it wants to use your mouse (e.g. unclicked mouse is hovering a window, or a widget is active).
 	bool        WantCaptureKeyboard;        // When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application. This is set by ImGui when it wants to use your keyboard inputs.
 	bool        WantTextInput;              // Mobile/console: when io.WantTextInput is true, you may display an on-screen keyboard. This is set by ImGui when it wants textual keyboard input to happen (e.g. when a InputText widget is active).
 	bool        WantMoveMouse;              // [BETA-NAV] MousePos has been altered, back-end should reposition mouse on next frame. Set only when 'NavMovesMouse=true'.
@@ -1106,7 +1105,7 @@ struct ImGuiTextFilter
 		bool empty() const { return b == e; }
 		char front() const { return *b; }
 		static bool is_blank(char c) { return c == ' ' || c == '\t'; }
-		void trim_blanks() { while (b < e && is_blank(*b)) b++; while (e > b&& is_blank(*(e - 1))) e--; }
+		void trim_blanks() { while (b < e && is_blank(*b)) b++; while (e > b && is_blank(*(e - 1))) e--; }
 		IMGUI_API void split(char separator, ImVector<TextRange>& out);
 	};
 
@@ -1142,7 +1141,7 @@ struct ImGuiTextBuffer
 
 // Helper: Simple Key->value storage
 // Typically you don't have to worry about this since a storage is held within each Window.
-// We use it to e.g. store collapse state for a tree (Int 0/1), store color edit options. 
+// We use it to e.g. store collapse state for a tree (Int 0/1), store color edit options.
 // This is optimized for efficient reading (dichotomy into a contiguous buffer), rare writing (typically tied to user interactions)
 // You can use it as custom user storage for temporary values. Declare your own storage if, for example:
 // - You want to manipulate the open/close state of a particular sub-tree in your interface (tree node uses Int 0/1 to store their state).
@@ -1278,7 +1277,7 @@ struct ImColor
 
 	ImColor() { Value.x = Value.y = Value.z = Value.w = 0.0f; }
 	ImColor(int r, int g, int b, int a = 255) { float sc = 1.0f / 255.0f; Value.x = (float)r * sc; Value.y = (float)g * sc; Value.z = (float)b * sc; Value.w = (float)a * sc; }
-	ImColor(ImU32 rgba) { float sc = 1.0f / 255.0f; Value.x = (float)((rgba >> IM_COL32_R_SHIFT) & 0xFF)* sc; Value.y = (float)((rgba >> IM_COL32_G_SHIFT) & 0xFF)* sc; Value.z = (float)((rgba >> IM_COL32_B_SHIFT) & 0xFF)* sc; Value.w = (float)((rgba >> IM_COL32_A_SHIFT) & 0xFF)* sc; }
+	ImColor(ImU32 rgba) { float sc = 1.0f / 255.0f; Value.x = (float)((rgba >> IM_COL32_R_SHIFT) & 0xFF) * sc; Value.y = (float)((rgba >> IM_COL32_G_SHIFT) & 0xFF) * sc; Value.z = (float)((rgba >> IM_COL32_B_SHIFT) & 0xFF) * sc; Value.w = (float)((rgba >> IM_COL32_A_SHIFT) & 0xFF) * sc; }
 	ImColor(float r, float g, float b, float a = 1.0f) { Value.x = r; Value.y = g; Value.z = b; Value.w = a; }
 	ImColor(const ImVec4& col) { Value = col; }
 	inline operator ImU32() const { return ImGui::ColorConvertFloat4ToU32(Value); }
@@ -1291,7 +1290,7 @@ struct ImColor
 
 // Helper: Manually clip large list of items.
 // If you are submitting lots of evenly spaced items and you have a random access to the list, you can perform coarse clipping based on visibility to save yourself from processing those items at all.
-// The clipper calculates the range of visible items and advance the cursor to compensate for the non-visible items we have skipped. 
+// The clipper calculates the range of visible items and advance the cursor to compensate for the non-visible items we have skipped.
 // ImGui already clip items based on their bounds but it needs to measure text size to do so. Coarse clipping before submission makes this cost and your own data fetching/submission cost null.
 // Usage:
 //     ImGuiListClipper clipper(1000);  // we have 1000 elements, evenly spaced.
@@ -1359,7 +1358,7 @@ struct ImDrawVert
 // You can override the vertex format layout by defining IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT in imconfig.h
 // The code expect ImVec2 pos (8 bytes), ImVec2 uv (8 bytes), ImU32 col (4 bytes), but you can re-order them or add other fields as needed to simplify integration in your engine.
 // The type has to be described within the macro (you can either declare the struct or use a typedef)
-// NOTE: IMGUI DOESN'T CLEAR THE STRUCTURE AND DOESN'T CALL A CONSTRUCTOR SO ANY CUSTOM FIELD WILL BE UNINITIALIZED. IF YOU ADD EXTRA FIELDS (SUCH AS A 'Z' COORDINATES) YOU WILL NEED TO CLEAR THEM DURING RENDER OR TO IGNORE THEM. 
+// NOTE: IMGUI DOESN'T CLEAR THE STRUCTURE AND DOESN'T CALL A CONSTRUCTOR SO ANY CUSTOM FIELD WILL BE UNINITIALIZED. IF YOU ADD EXTRA FIELDS (SUCH AS A 'Z' COORDINATES) YOU WILL NEED TO CLEAR THEM DURING RENDER OR TO IGNORE THEM.
 IMGUI_OVERRIDE_DRAWVERT_STRUCT_LAYOUT;
 #endif
 
@@ -1556,7 +1555,7 @@ struct ImFontAtlas
 
 															// Build atlas, retrieve pixel data.
 															// User is in charge of copying the pixels into graphics memory (e.g. create a texture with your engine). Then store your texture handle with SetTexID().
-															// RGBA32 format is provided for convenience and compatibility, but note that unless you use CustomRect to draw color data, the RGB pixels emitted from Fonts will all be white (~75% of waste). 
+															// RGBA32 format is provided for convenience and compatibility, but note that unless you use CustomRect to draw color data, the RGB pixels emitted from Fonts will all be white (~75% of waste).
 															// Pitch = Width * BytesPerPixels
 	IMGUI_API bool              Build();                    // Build pixels data. This is called automatically for you by the GetTexData*** functions.
 	IMGUI_API void              GetTexDataAsAlpha8(unsigned char** out_pixels, int* out_width, int* out_height, int* out_bytes_per_pixel = NULL);  // 1 byte per-pixel
