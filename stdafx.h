@@ -36,7 +36,7 @@
 #include "hooks.h"
 #include "core.h"
 #include "meni.h"
-#include "rendererer.h"
+#include "render.h"
 
 ImGuiWindow& BeginScene();
 VOID EndScene(ImGuiWindow& window);

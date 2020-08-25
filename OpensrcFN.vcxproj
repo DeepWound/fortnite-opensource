@@ -189,7 +189,7 @@
     <ClInclude Include="imgui_xorstr.h" />
     <ClInclude Include="meni.h" />
     <ClInclude Include="offsets.h" />
-    <ClInclude Include="rendererer.h" />
+    <ClInclude Include="render.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="stb_rect_pack.h" />
     <ClInclude Include="stb_textedit.h" />
