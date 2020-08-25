@@ -189,10 +189,12 @@
     <ClInclude Include="imgui_xorstr.h" />
     <ClInclude Include="meni.h" />
     <ClInclude Include="offsets.h" />
+    <ClInclude Include="rendererer.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="xorstr.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="spoofinternal.asm">
