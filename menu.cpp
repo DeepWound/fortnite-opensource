@@ -11,8 +11,27 @@ HRESULT(*ResizeOriginal)(IDXGISwapChain* swapChain, UINT bufferCount, UINT width
 WNDPROC oWndProc;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-
 static bool ShowMenu = true;
+static float border_bang = 1.0f;
+struct TabInfo
+{
+	ImRect bb;
+	unsigned int index;
+};
+std::vector<TabInfo> tabs_info;
+static int old_tab_index = 0;
+bool tab_info_already_exist(std::vector<TabInfo> infos, unsigned int index)
+{
+	for (int i = 0; i < infos.size(); i++)
+		if (infos[i].index == index) return true;
+
+	return false;
+}
+float clip(float n, float lower, float upper)
+{
+	n = (n > lower) * n + !(n > lower) * lower;
+	return (n < upper) * n + !(n < upper) * upper;
+}
 namespace ImGui
 {
 	static inline float ObliqueSliderBehaviorCalcRatioFromValue(float v, float v_min, float v_max, float power, float linear_zero_pos)
@@ -625,12 +644,12 @@ void draw_visuals_tab()
 	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("player visuals"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
 	ImGui::Text(xorstr("player visuals"));
 	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-	ImGui::Checkbox(xorstr("Covid ESP"), &Settings.ESP.PlayerAmmo);
-	ImGui::Checkbox(xorstr("Covid Crosshair"), &Settings.Crosshair);
-	ImGui::Checkbox(xorstr("Covid Boat ESP"), &Settings.ESP.Boxes);
-	ImGui::Checkbox(xorstr("Covid Ammo ESP"), &Settings.ESP.debug);
-	ImGui::Checkbox(xorstr("Covid Helicopter ESP"), &Settings.ESP.PlayerNames);
-	ImGui::Checkbox(xorstr("Covid Car ESP"), &Settings.ESP.Radar);
+	//ImGui::Checkbox(xorstr("Covid ESP"), &Settings.ESP.Boxes);
+	//ImGui::Checkbox(xorstr("Covid Crosshair"), &Settings.Crosshair);
+	ImGui::Checkbox(xorstr("Covid Boat ESP"), &Settings.ESP.Containers);
+	ImGui::Checkbox(xorstr("Covid Ammo ESP"), &Settings.ESP.Containers);
+	ImGui::Checkbox(xorstr("Covid Helicopter ESP"), &Settings.ESP.Containers);
+	ImGui::Checkbox(xorstr("Covid Car ESP"), &Settings.ESP.Containers);
 	ImGui::Spacing();
 	//ImGui::EndChild();
 }
@@ -648,9 +667,9 @@ void draw_aimbot_tab()
 	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("aimbot adjust"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
 	ImGui::Text(xorstr("Aimbot Settings"));
 	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-	ImGui::Checkbox(xorstr("Covid FOV Circle"), &Settings.ColorAdjuster);
+	//ImGui::Checkbox(xorstr("Covid FOV Circle"), &Settings.ColorAdjuster);
 	ImGui::SliderFloat(xorstr("##FOV"), &Settings.AimbotFOV, 0, 1000, xorstr("FOV Circle: %.2f"));
-	ImGui::SliderFloat(xorstr("##AimSmooth"), &Settings.smooth1, 0, 5, xorstr("Aim Smooth: %.2f"));
+	//ImGui::SliderFloat(xorstr("##AimSmooth"), &Settings.Smooth, 0, 5, xorstr("Aim Smooth: %.2f"));
 	//ImGui::EndChild();
 }
 void draw_magic_tab()
@@ -661,15 +680,8 @@ void draw_magic_tab()
 	ImGui::SetCursorPosX(ImGui::GetWindowWidth() - (ImGui::CalcTextSize(xorstr("misc settings"), NULL, TRUE).x + ImGui::GetWindowWidth()) / 2);
 	ImGui::Text(xorstr("Misc"));
 	ImGui::SeparatorColored(ImGui::GetStyleColorVec4(ImGuiCol_Separator));
-	ImGui::Button(("Invisible"));
-	ImGui::SameLine();
-	ImGui::Button(("Visible"));
-	ImGui::Checkbox(xorstr("Spinbot"), &);
-	ImGui::Checkbox(xorstr("Airstuck"), &Settings.debug2);
-	ImGui::Checkbox(xorstr("Instant Reload"), &Settings.debug3);
-	ImGui::Checkbox(xorstr("Fast Actions"), &Settings.debug4);
-	ImGui::Checkbox(xorstr("Rapid Fire"), &Settings.debug5);
-	ImGui::Checkbox(xorstr("Vehicle Speed [only enable in Vehicle]"), &Settings.debug6);
+	ImGui::Text(xorstr("soon my bois"));
+
 	//ImGui::EndChild();
 }
 void draw_info_tab()
