@@ -26,7 +26,7 @@
 #include "offsets.h"
 #include "util.h"
 #include "settings.h"
-#include "core.h
+#include "hooks.h"
 #include "rendererer.h"
 
 #include <stdlib.h>

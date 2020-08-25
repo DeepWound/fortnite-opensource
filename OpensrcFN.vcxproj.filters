@@ -30,6 +30,7 @@
     <ClInclude Include="imgui_xorstr.h" />
     <ClInclude Include="rendererer.h" />
     <ClInclude Include="xorstr.h" />
+    <ClInclude Include="hooks.h" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="spoofinternal.asm" />

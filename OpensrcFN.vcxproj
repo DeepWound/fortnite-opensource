@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="core.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="hooks.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
