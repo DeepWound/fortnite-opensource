@@ -578,7 +578,6 @@ of a deep nested inner loop in your code.
 
 */
 
-#include "../imgui_xorstr.h"
 #include "imgui.h"
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include "imgui_internal.h"
@@ -599,6 +598,7 @@ of a deep nested inner loop in your code.
 #pragma warning (disable: 4996) // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #endif
 
+// Clang warnings with -Weverything
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wunknown-pragmas"        // warning : unknown warning group '-Wformat-pedantic *'        // not all warnings are known by all clang versions.. so ignoring warnings triggers new warnings on some configuration. great!
 #pragma clang diagnostic ignored "-Wold-style-cast"         // warning : use of old-style cast                              // yes, they are more terse.
@@ -4901,7 +4901,7 @@ bool ImGui::Begin(const char* name, bool* p_open, ImGuiWindowFlags flags)
 			{
 				const float PAD = 2.0f;
 				const float rad = (window->TitleBarHeight() - PAD * 2.0f) * 0.5f;
-				if (CloseButton(window->GetID(xorstr("#CLOSE")), window->Rect().GetTR() + ImVec2(-PAD - rad, PAD + rad), rad))
+				if (CloseButton(window->GetID("#CLOSE"), window->Rect().GetTR() + ImVec2(-PAD - rad, PAD + rad), rad))
 					*p_open = false;
 			}
 

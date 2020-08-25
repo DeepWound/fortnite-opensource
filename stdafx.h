@@ -10,9 +10,9 @@
 #include <string>
 #include <vector>
 
-#include <imgui.h>
-#include <imgui_impl_dx11.h>
-#include <imgui_internal.h>
+#include "imgui.h"
+#include "imgui_impl_dx11.h"
+#include "imgui_internal.h"
 
 #include <MinHook.h>
 #pragma comment(lib, "minhook.lib")

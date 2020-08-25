@@ -1,4 +1,3 @@
-
 // dear imgui, v1.54 WIP
 // (drawing and font code)
 
@@ -654,7 +653,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
 
 				// Average normals
 				ImVec2 dm = (temp_normals[i1] + temp_normals[i2]) * 0.5f;
-				float dmr2 = dm.x*dm.x + dm.y*dm.y;
+				float dmr2 = dm.x * dm.x + dm.y * dm.y;
 				if (dmr2 > 0.000001f)
 				{
 					float scale = 1.0f / dmr2;
@@ -708,7 +707,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
 
 				// Average normals
 				ImVec2 dm = (temp_normals[i1] + temp_normals[i2]) * 0.5f;
-				float dmr2 = dm.x*dm.x + dm.y*dm.y;
+				float dmr2 = dm.x * dm.x + dm.y * dm.y;
 				if (dmr2 > 0.000001f)
 				{
 					float scale = 1.0f / dmr2;
@@ -817,7 +816,7 @@ void ImDrawList::AddConvexPolyFilled(const ImVec2* points, const int points_coun
 			const ImVec2& n0 = temp_normals[i0];
 			const ImVec2& n1 = temp_normals[i1];
 			ImVec2 dm = (n0 + n1) * 0.5f;
-			float dmr2 = dm.x*dm.x + dm.y*dm.y;
+			float dmr2 = dm.x * dm.x + dm.y * dm.y;
 			if (dmr2 > 0.000001f)
 			{
 				float scale = 1.0f / dmr2;
@@ -896,18 +895,18 @@ static void PathBezierToCasteljau(ImVector<ImVec2>* path, float x1, float y1, fl
 	float d3 = ((x3 - x4) * dy - (y3 - y4) * dx);
 	d2 = (d2 >= 0) ? d2 : -d2;
 	d3 = (d3 >= 0) ? d3 : -d3;
-	if ((d2 + d3) * (d2 + d3) < tess_tol * (dx*dx + dy*dy))
+	if ((d2 + d3) * (d2 + d3) < tess_tol * (dx * dx + dy * dy))
 	{
 		path->push_back(ImVec2(x4, y4));
 	}
 	else if (level < 10)
 	{
-		float x12 = (x1 + x2)*0.5f, y12 = (y1 + y2)*0.5f;
-		float x23 = (x2 + x3)*0.5f, y23 = (y2 + y3)*0.5f;
-		float x34 = (x3 + x4)*0.5f, y34 = (y3 + y4)*0.5f;
-		float x123 = (x12 + x23)*0.5f, y123 = (y12 + y23)*0.5f;
-		float x234 = (x23 + x34)*0.5f, y234 = (y23 + y34)*0.5f;
-		float x1234 = (x123 + x234)*0.5f, y1234 = (y123 + y234)*0.5f;
+		float x12 = (x1 + x2) * 0.5f, y12 = (y1 + y2) * 0.5f;
+		float x23 = (x2 + x3) * 0.5f, y23 = (y2 + y3) * 0.5f;
+		float x34 = (x3 + x4) * 0.5f, y34 = (y3 + y4) * 0.5f;
+		float x123 = (x12 + x23) * 0.5f, y123 = (y12 + y23) * 0.5f;
+		float x234 = (x23 + x34) * 0.5f, y234 = (y23 + y34) * 0.5f;
+		float x1234 = (x123 + x234) * 0.5f, y1234 = (y123 + y234) * 0.5f;
 
 		PathBezierToCasteljau(path, x1, y1, x12, y12, x123, y123, x1234, y1234, tess_tol, level + 1);
 		PathBezierToCasteljau(path, x1234, y1234, x234, y234, x34, y34, x4, y4, tess_tol, level + 1);
@@ -929,11 +928,11 @@ void ImDrawList::PathBezierCurveTo(const ImVec2& p2, const ImVec2& p3, const ImV
 		{
 			float t = t_step * i_step;
 			float u = 1.0f - t;
-			float w1 = u*u*u;
-			float w2 = 3 * u*u*t;
-			float w3 = 3 * u*t*t;
-			float w4 = t*t*t;
-			_Path.push_back(ImVec2(w1*p1.x + w2*p2.x + w3*p3.x + w4*p4.x, w1*p1.y + w2*p2.y + w3*p3.y + w4*p4.y));
+			float w1 = u * u * u;
+			float w2 = 3 * u * u * t;
+			float w3 = 3 * u * t * t;
+			float w4 = t * t * t;
+			_Path.push_back(ImVec2(w1 * p1.x + w2 * p2.x + w3 * p3.x + w4 * p4.x, w1 * p1.y + w2 * p2.y + w3 * p3.y + w4 * p4.y));
 		}
 	}
 }
@@ -1063,7 +1062,7 @@ void ImDrawList::AddCircle(const ImVec2& centre, float radius, ImU32 col, int nu
 	if ((col & IM_COL32_A_MASK) == 0)
 		return;
 
-	const float a_max = IM_PI*2.0f * ((float)num_segments - 1.0f) / (float)num_segments;
+	const float a_max = IM_PI * 2.0f * ((float)num_segments - 1.0f) / (float)num_segments;
 	PathArcTo(centre, radius - 0.5f, 0.0f, a_max, num_segments);
 	PathStroke(col, true, thickness);
 }
@@ -1073,7 +1072,7 @@ void ImDrawList::AddCircleFilled(const ImVec2& centre, float radius, ImU32 col, 
 	if ((col & IM_COL32_A_MASK) == 0)
 		return;
 
-	const float a_max = IM_PI*2.0f * ((float)num_segments - 1.0f) / (float)num_segments;
+	const float a_max = IM_PI * 2.0f * ((float)num_segments - 1.0f) / (float)num_segments;
 	PathArcTo(centre, radius, 0.0f, a_max, num_segments);
 	PathFillConvex(col);
 }
@@ -1353,7 +1352,6 @@ static const ImVec2 FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA[ImGuiMouseCursor_Count_][
 	{ ImVec2(55,0), ImVec2(17,17), ImVec2(9, 9) }, // ImGuiMouseCursor_ResizeNWSE
 };
 
-
 ImFontAtlas::ImFontAtlas()
 {
 	TexID = NULL;
@@ -1486,9 +1484,9 @@ ImFont* ImFontAtlas::AddFont(const ImFontConfig* font_cfg)
 }
 
 // Default font TTF is compressed with stb_compress then base85 encoded (see extra_fonts/binary_to_compressed_c.cpp for encoder)
-static unsigned int stb_decompress_length(unsigned char *input);
-static unsigned int stb_decompress(unsigned char *output, unsigned char *i, unsigned int length);
-static const char*  GetDefaultCompressedFontDataTTFBase85();
+static unsigned int stb_decompress_length(unsigned char* input);
+static unsigned int stb_decompress(unsigned char* output, unsigned char* i, unsigned int length);
+static const char* GetDefaultCompressedFontDataTTFBase85();
 static unsigned int Decode85Byte(char c) { return c >= '\\' ? c - 36 : c - 35; }
 static void         Decode85(const unsigned char* src, unsigned char* dst)
 {
@@ -1554,7 +1552,7 @@ ImFont* ImFontAtlas::AddFontFromMemoryTTF(void* ttf_data, int ttf_size, float si
 ImFont* ImFontAtlas::AddFontFromMemoryCompressedTTF(const void* compressed_ttf_data, int compressed_ttf_size, float size_pixels, const ImFontConfig* font_cfg_template, const ImWchar* glyph_ranges)
 {
 	const unsigned int buf_decompressed_size = stb_decompress_length((unsigned char*)compressed_ttf_data);
-	unsigned char* buf_decompressed_data = (unsigned char *)ImGui::MemAlloc(buf_decompressed_size);
+	unsigned char* buf_decompressed_data = (unsigned char*)ImGui::MemAlloc(buf_decompressed_size);
 	stb_decompress(buf_decompressed_data, (unsigned char*)compressed_ttf_data, (unsigned int)compressed_ttf_size);
 
 	ImFontConfig font_cfg = font_cfg_template ? *font_cfg_template : ImFontConfig();
@@ -1673,9 +1671,9 @@ bool    ImFontAtlasBuildWithStbTruetype(ImFontAtlas* atlas)
 	struct ImFontTempBuildData
 	{
 		stbtt_fontinfo      FontInfo;
-		stbrp_rect*         Rects;
+		stbrp_rect* Rects;
 		int                 RectsCount;
-		stbtt_pack_range*   Ranges;
+		stbtt_pack_range* Ranges;
 		int                 RangesCount;
 	};
 	ImFontTempBuildData* tmp_array = (ImFontTempBuildData*)ImGui::MemAlloc((size_t)atlas->ConfigData.Size * sizeof(ImFontTempBuildData));
@@ -1902,10 +1900,10 @@ static void ImFontAtlasBuildRenderDefaultTexData(ImFontAtlas* atlas)
 		cursor_data.Type = type;
 		cursor_data.Size = size;
 		cursor_data.HotOffset = FONT_ATLAS_DEFAULT_TEX_CURSOR_DATA[type][2];
-		cursor_data.TexUvMin[0] = (pos)* tex_uv_scale;
+		cursor_data.TexUvMin[0] = (pos)*tex_uv_scale;
 		cursor_data.TexUvMax[0] = (pos + size) * tex_uv_scale;
 		pos.x += FONT_ATLAS_DEFAULT_TEX_DATA_W_HALF + 1;
-		cursor_data.TexUvMin[1] = (pos)* tex_uv_scale;
+		cursor_data.TexUvMin[1] = (pos)*tex_uv_scale;
 		cursor_data.TexUvMax[1] = (pos + size) * tex_uv_scale;
 	}
 }
@@ -1934,7 +1932,7 @@ void ImFontAtlasBuildFinish(ImFontAtlas* atlas)
 }
 
 // Retrieve list of range (2 int per range, values are inclusive)
-const ImWchar*   ImFontAtlas::GetGlyphRangesDefault()
+const ImWchar* ImFontAtlas::GetGlyphRangesDefault()
 {
 	static const ImWchar ranges[] =
 	{
@@ -1944,7 +1942,7 @@ const ImWchar*   ImFontAtlas::GetGlyphRangesDefault()
 	return &ranges[0];
 }
 
-const ImWchar*  ImFontAtlas::GetGlyphRangesKorean()
+const ImWchar* ImFontAtlas::GetGlyphRangesKorean()
 {
 	static const ImWchar ranges[] =
 	{
@@ -1956,7 +1954,7 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesKorean()
 	return &ranges[0];
 }
 
-const ImWchar*  ImFontAtlas::GetGlyphRangesChinese()
+const ImWchar* ImFontAtlas::GetGlyphRangesChinese()
 {
 	static const ImWchar ranges[] =
 	{
@@ -1970,7 +1968,7 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesChinese()
 	return &ranges[0];
 }
 
-const ImWchar*  ImFontAtlas::GetGlyphRangesJapanese()
+const ImWchar* ImFontAtlas::GetGlyphRangesJapanese()
 {
 	// Store the 1946 ideograms code points as successive offsets from the initial unicode codepoint 0x4E00. Each offset has an implicit +1.
 	// This encoding is designed to helps us reduce the source code size.
@@ -2035,7 +2033,7 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesJapanese()
 	return &full_ranges[0];
 }
 
-const ImWchar*  ImFontAtlas::GetGlyphRangesCyrillic()
+const ImWchar* ImFontAtlas::GetGlyphRangesCyrillic()
 {
 	static const ImWchar ranges[] =
 	{
@@ -2048,7 +2046,7 @@ const ImWchar*  ImFontAtlas::GetGlyphRangesCyrillic()
 	return &ranges[0];
 }
 
-const ImWchar*  ImFontAtlas::GetGlyphRangesThai()
+const ImWchar* ImFontAtlas::GetGlyphRangesThai()
 {
 	static const ImWchar ranges[] =
 	{
@@ -2661,7 +2659,7 @@ void ImGui::RenderRectFilledRangeH(ImDrawList* draw_list, const ImRect& rect, Im
 		draw_list->PathLineTo(ImVec2(x0, p1.y));
 		draw_list->PathLineTo(ImVec2(x0, p0.y));
 	}
-	else if (arc0_b == 0.0f && arc0_e == IM_PI*0.5f)
+	else if (arc0_b == 0.0f && arc0_e == IM_PI * 0.5f)
 	{
 		draw_list->PathArcToFast(ImVec2(x0, p1.y - rounding), rounding, 3, 6); // BL
 		draw_list->PathArcToFast(ImVec2(x0, p0.y + rounding), rounding, 6, 9); // TR
@@ -2681,7 +2679,7 @@ void ImGui::RenderRectFilledRangeH(ImDrawList* draw_list, const ImRect& rect, Im
 			draw_list->PathLineTo(ImVec2(x1, p0.y));
 			draw_list->PathLineTo(ImVec2(x1, p1.y));
 		}
-		else if (arc1_b == 0.0f && arc1_e == IM_PI*0.5f)
+		else if (arc1_b == 0.0f && arc1_e == IM_PI * 0.5f)
 		{
 			draw_list->PathArcToFast(ImVec2(x1, p0.y + rounding), rounding, 9, 12); // TR
 			draw_list->PathArcToFast(ImVec2(x1, p1.y - rounding), rounding, 0, 3);  // BR
@@ -2703,14 +2701,14 @@ void ImGui::RenderRectFilledRangeH(ImDrawList* draw_list, const ImRect& rect, Im
 // Decompression from stb.h (public domain) by Sean Barrett https://github.com/nothings/stb/blob/master/stb.h
 //-----------------------------------------------------------------------------
 
-static unsigned int stb_decompress_length(unsigned char *input)
+static unsigned int stb_decompress_length(unsigned char* input)
 {
 	return (input[8] << 24) + (input[9] << 16) + (input[10] << 8) + input[11];
 }
 
-static unsigned char *stb__barrier, *stb__barrier2, *stb__barrier3, *stb__barrier4;
-static unsigned char *stb__dout;
-static void stb__match(unsigned char *data, unsigned int length)
+static unsigned char* stb__barrier, * stb__barrier2, * stb__barrier3, * stb__barrier4;
+static unsigned char* stb__dout;
+static void stb__match(unsigned char* data, unsigned int length)
 {
 	// INVERSE of memmove... write each byte before copying the next...
 	IM_ASSERT(stb__dout + length <= stb__barrier);
@@ -2719,7 +2717,7 @@ static void stb__match(unsigned char *data, unsigned int length)
 	while (length--) *stb__dout++ = *data++;
 }
 
-static void stb__lit(unsigned char *data, unsigned int length)
+static void stb__lit(unsigned char* data, unsigned int length)
 {
 	IM_ASSERT(stb__dout + length <= stb__barrier);
 	if (stb__dout + length > stb__barrier) { stb__dout += length; return; }
@@ -2732,7 +2730,7 @@ static void stb__lit(unsigned char *data, unsigned int length)
 #define stb__in3(x)   ((i[x] << 16) + stb__in2((x)+1))
 #define stb__in4(x)   ((i[x] << 24) + stb__in3((x)+1))
 
-static unsigned char *stb_decompress_token(unsigned char *i)
+static unsigned char* stb_decompress_token(unsigned char* i)
 {
 	if (*i >= 0x20) { // use fewer if's for cases that expand small
 		if (*i >= 0x80)       stb__match(stb__dout - i[1] - 1, i[0] - 0x80 + 1), i += 2;
@@ -2750,7 +2748,7 @@ static unsigned char *stb_decompress_token(unsigned char *i)
 	return i;
 }
 
-static unsigned int stb_adler32(unsigned int adler32, unsigned char *buffer, unsigned int buflen)
+static unsigned int stb_adler32(unsigned int adler32, unsigned char* buffer, unsigned int buflen)
 {
 	const unsigned long ADLER_MOD = 65521;
 	unsigned long s1 = adler32 & 0xffff, s2 = adler32 >> 16;
@@ -2781,7 +2779,7 @@ static unsigned int stb_adler32(unsigned int adler32, unsigned char *buffer, uns
 	return (unsigned int)(s2 << 16) + (unsigned int)s1;
 }
 
-static unsigned int stb_decompress(unsigned char *output, unsigned char *i, unsigned int length)
+static unsigned int stb_decompress(unsigned char* output, unsigned char* i, unsigned int length)
 {
 	unsigned int olen;
 	if (stb__in4(0) != 0x57bC0000) return 0;
@@ -2795,7 +2793,7 @@ static unsigned int stb_decompress(unsigned char *output, unsigned char *i, unsi
 
 	stb__dout = output;
 	for (;;) {
-		unsigned char *old_i = i;
+		unsigned char* old_i = i;
 		i = stb_decompress_token(i);
 		if (i == old_i) {
 			if (*i == 0x05 && i[1] == 0xfa) {
