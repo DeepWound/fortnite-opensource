@@ -664,7 +664,7 @@ void draw_magic_tab()
 	ImGui::Button(("Invisible"));
 	ImGui::SameLine();
 	ImGui::Button(("Visible"));
-	ImGui::Checkbox(xorstr("Spinbot"), &Settings.debug1);
+	ImGui::Checkbox(xorstr("Spinbot"), &);
 	ImGui::Checkbox(xorstr("Airstuck"), &Settings.debug2);
 	ImGui::Checkbox(xorstr("Instant Reload"), &Settings.debug3);
 	ImGui::Checkbox(xorstr("Fast Actions"), &Settings.debug4);
@@ -690,6 +690,7 @@ void draw_info_tab()
 
 	//ImGui::EndChild();
 }
+
 auto success = FALSE;
 do {
 	float closestDistance = FLT_MAX;
